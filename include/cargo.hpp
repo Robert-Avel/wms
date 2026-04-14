@@ -13,12 +13,15 @@ class UnitCargo {
     public:
     UnitCargo(Item& cargo_, uint32_t quantity_);
 
-    inline double getTotalWeight() const;
-    inline double getTotalCubic() const;
-    inline double getTotalCents() const;
+    double getTotalWeight() const;
+    double getTotalCubic() const;
+    double getTotalCents() const;
     const Item& getItem() const;
-    inline uint32_t getID() const;
-    inline uint32_t getQuantity() const;
+    uint32_t getID() const;
+    uint32_t getQuantity() const;
+    std::string format() const;
+
+    void quantityIncrement(int32_t qnt);
 };
 
 
@@ -33,7 +36,8 @@ class MultiCargo {
     double getTotalWeight();
     uint32_t getTotalCubic();
     cents getTotalCents();
-    const Item* getItem(uint32_t index);
-    const Item* getItemByID(uint32_t identifier);
+    UnitCargo* getCargo(uint32_t index);
+    UnitCargo* getCargoByID(uint32_t identifier);
     uint32_t getTotalQuantity();
+    std::string format(bool indent) const;
 };
