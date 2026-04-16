@@ -1,28 +1,25 @@
 #include "cargo.hpp"
 #include "item.hpp"
 #include "status.hpp"
-#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <sstream>
 
 
-UnitCargo::UnitCargo(Item& cargo_, uint32_t quantity_) : cargo(cargo_)
-{
-    quantity = quantity_;
-    cargo = cargo_;
-}
+UnitCargo::UnitCargo(const Item& cargo_, uint32_t quantity_):
+cargo(std::ref(cargo_)), quantity(quantity_) {}
 
 
 double UnitCargo::getTotalWeight() const{
-    return cargo.get().weight * quantity;
+    return cargo.weight * quantity;
 }
 
 double UnitCargo::getTotalCubic() const{
-    return cargo.get().m3 * quantity;
+    return cargo.m3 * quantity;
 }
 
 double UnitCargo::getTotalCents() const{
-    return cargo.get().brute_value * quantity;
+    return cargo.brute_value * quantity;
 }
 
 const Item& UnitCargo::getItem() const{
@@ -33,7 +30,7 @@ uint32_t UnitCargo::getQuantity() const{
 }
 
 uint32_t UnitCargo::getID() const{
-    return cargo.get().identifier;
+    return cargo.identifier;
 }
 
 std::string UnitCargo::format() const {
@@ -49,6 +46,7 @@ std::string UnitCargo::format() const {
 
 
 void UnitCargo::quantityIncrement(int32_t qnt) {quantity += quantity;}
+void UnitCargo::quantityDecrement(int32_t qnt) {quantity -= quantity;}
 
 
 
@@ -70,10 +68,10 @@ Status MultiCargo::appendCargo(const UnitCargo& cargo) {
 
 
 Status MultiCargo::removeCargo(uint32_t identifier) {
-    std::size_t s = cargos.size();
-    for(size_t i = 0; i < s; i++) {
-        if(cargos[i].getID() == identifier) {
-            cargos.erase(cargos.begin() + i);
+    auto it = cargos.begin();
+    while(it != cargos.end()) {
+        if(it->getID() == identifier) {
+            cargos.erase(it);
             return W_SUCCESS;
         }
     }
@@ -105,14 +103,6 @@ cents MultiCargo::getTotalCents() {
     return acc;
 }
 
-UnitCargo* MultiCargo::getCargo(uint32_t index) {
-    if(cargos.size() < index || index < 0) {
-        return nullptr;
-    }
-    else {
-        return &cargos[index];
-    }
-}
 
 UnitCargo* MultiCargo::getCargoByID(uint32_t identifier) {
     for(UnitCargo& u: cargos) {
@@ -132,11 +122,12 @@ uint32_t MultiCargo::getTotalQuantity() {
 }
 
 
-std::string MultiCargo::format(bool indent) const {
+std::string MultiCargo::format(bool indent) {
     if (cargos.empty()) {return "\tNo Itens";}
+
     std::ostringstream buffer;
     for(const UnitCargo& c: cargos) {
-        buffer << (indent ? "\t": "") << c.format() << "\n";
+        buffer << (indent ? "\t": "")<< c.getQuantity() << "x | " << c.format() << "\n";
     }
     return buffer.str();
 }

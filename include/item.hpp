@@ -9,7 +9,7 @@ typedef uint32_t cubic;
 class Item {
     public:
 
-    uint32_t identifier; //Codebar too
+    const uint32_t identifier; //Codebar too
     std::string global_name;
     cubic m3;
     double weight;

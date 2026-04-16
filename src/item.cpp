@@ -6,9 +6,9 @@ inline double moneyFormatSimple(uint32_t __v) {
     return  __v / 100.0;
 }
 
-Item::Item(uint32_t identifier_,std::string global_name_, cubic m3_,double weight_,cents brute_value_)
+Item::Item(uint32_t identifier_,std::string global_name_, cubic m3_,double weight_,cents brute_value_):
+identifier(identifier_)
 {
-    identifier = identifier_;
     global_name = global_name_;
     m3 = m3_;
     weight = weight_;

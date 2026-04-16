@@ -2,16 +2,16 @@
 #include "item.hpp"
 #include "status.hpp"
 #include <cstdint>
-#include <functional>
-#include <vector>
+#include <list>
 
 
 class UnitCargo {
-    std::reference_wrapper<Item> cargo;
+    const Item& cargo;
     uint32_t quantity;
 
     public:
-    UnitCargo(Item& cargo_, uint32_t quantity_);
+    UnitCargo(const Item& cargo_, uint32_t quantity_);
+
 
     double getTotalWeight() const;
     double getTotalCubic() const;
@@ -22,22 +22,23 @@ class UnitCargo {
     std::string format() const;
 
     void quantityIncrement(int32_t qnt);
+    void quantityDecrement(int32_t qnt);
 };
 
 
 class MultiCargo {
-    std::vector<UnitCargo> cargos;
+    std::list<UnitCargo> cargos;
     uint32_t identifier;
 
     public:
     MultiCargo(uint32_t id);
     Status appendCargo(const UnitCargo& cargo);
     Status removeCargo(uint32_t identifier);
+
     double getTotalWeight();
     uint32_t getTotalCubic();
     cents getTotalCents();
-    UnitCargo* getCargo(uint32_t index);
     UnitCargo* getCargoByID(uint32_t identifier);
     uint32_t getTotalQuantity();
-    std::string format(bool indent) const;
+    std::string format(bool indent);
 };

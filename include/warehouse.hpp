@@ -9,20 +9,18 @@
 class Warehouse {
   private:
   std::string identifier;
-  cubic actual;
-  cubic capacity;
+  cubic m3_capacity;
   MultiCargo multi_c;
 
   public:
   Warehouse(std::string __identifier, cubic __capacity);
-  inline cubic getActual();
-  inline cubic getCapacity();
-  std::string getID();
-  std::string format() const;
+  cubic getActual();
+  cubic getCapacity() const;
+  std::string getID() const;
+  std::string format();
 
 
-  Status addCargo(const UnitCargo& uc);
-  Status addCargo(uint32_t __id);
-  Status removeCargo(const UnitCargo& uc);
-  Status removeCargo(uint32_t __id);
+  Status cargoIncrement(const UnitCargo& uc);
+  Status cargoRemove(const UnitCargo& uc);
+  Status cargoDecrement(const UnitCargo& uc, uint32_t qnt);
 };

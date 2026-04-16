@@ -1,8 +1,22 @@
+#include "cargo.hpp"
 #include "warehouse.hpp"
 #include "system.hpp"
 #include "item.hpp"
 #include "status.hpp"
 #include <cstdint>
+
+
+Status WMS::select_wh(std::string identifier) {
+    Warehouse* selection = whGetbID(identifier);
+    if (selection == nullptr) {
+        return W_NOT_FOUND;
+    } else {
+        warehouse_cursor = selection;
+        return W_SUCCESS;
+    }
+}
+
+Warehouse& WMS::getSelectedWH() {return *warehouse_cursor;}
 
 
 uint32_t WMS::activeWH() {
@@ -58,11 +72,11 @@ Warehouse* WMS::whGetbID(std::string identifier) {
 }
 
 
-Status WMS::cargoAdd(std::string wh_id, uint32_t iten_id) {
-    Warehouse* wh = whGetbID(wh_id);
+Status WMS::cargoAdd(uint32_t iten_id, uint32_t quantity_) {
     const Item* i = itemGetbID(iten_id);
 
-    if(wh == nullptr || i == nullptr) {return  W_NOT_FOUND;}
+    if(i == nullptr) {return  W_NOT_FOUND;}
+    if(warehouse_cursor == nullptr) {return  W_NOT_SELECTED;}
 
-    wh.
+    return warehouse_cursor->cargoIncrement(UnitCargo(*i, quantity_));
 }

@@ -6,26 +6,25 @@
 
 Warehouse::Warehouse(std::string __identifier, cubic __capacity):  multi_c(0) {
     identifier = __identifier;
-    capacity = __capacity;
-    actual = 0;
+    m3_capacity = __capacity;
 }
 
-inline cubic Warehouse::getActual() {return actual;}
-inline cubic Warehouse::getCapacity() {return capacity;}
-std::string Warehouse::getID() {return identifier;}
+cubic Warehouse::getActual() {return multi_c.getTotalCubic();}
+cubic Warehouse::getCapacity() const {return m3_capacity;}
+std::string Warehouse::getID() const {return identifier;}
 
-std::string Warehouse::format() const {
+std::string Warehouse::format() {
     std::ostringstream buffer;
     buffer << "ID: " << identifier << "\n"
-           << "Capacity: " << capacity << "/" << actual << "\n"
+           << "Capacity: " << m3_capacity << "/" << getActual() << "\n"
            << "Itens: " << "\n" << multi_c.format(true);
     return buffer.str();
 }
 
 
 
-Status Warehouse::addCargo(const UnitCargo& uc) {
-    if(actual + uc.getTotalCubic() > capacity) {return W_FULL;}
+Status Warehouse::cargoIncrement(const UnitCargo& uc) {
+    if(getActual() + uc.getTotalCubic() > m3_capacity) {return W_FULL;}
 
     if(multi_c.appendCargo(uc) == W_ALREADY_EXIST) {
         multi_c.getCargoByID(uc.getID())->quantityIncrement(uc.getQuantity());
@@ -33,14 +32,22 @@ Status Warehouse::addCargo(const UnitCargo& uc) {
     return W_SUCCESS;
 }
 
-Status Warehouse::addCargo(uint32_t __id) {
+Status Warehouse::cargoRemove(const UnitCargo& uc) {
+    UnitCargo* target = multi_c.getCargoByID(uc.getID());
 
+    if(target == nullptr) {return W_NOT_FOUND;}
+    multi_c.removeCargo(uc.getID());
+    return W_SUCCESS;
 }
 
-Status Warehouse::removeCargo(const UnitCargo& uc) {
+Status Warehouse::cargoDecrement(const UnitCargo& uc, uint32_t qnt) {
+    UnitCargo* target = multi_c.getCargoByID(uc.getID());
+    if(target == nullptr) {return W_NOT_FOUND;}
 
-}
-
-Status Warehouse::removeCargo(uint32_t __id) {
-
+    if(qnt >= target->getQuantity()) {
+        cargoRemove(uc);
+    } else {
+        target->quantityDecrement(qnt);
+    }
+    return W_SUCCESS;
 }
