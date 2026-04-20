@@ -45,8 +45,8 @@ std::string UnitCargo::format() const {
 }
 
 
-void UnitCargo::quantityIncrement(int32_t qnt) {quantity += quantity;}
-void UnitCargo::quantityDecrement(int32_t qnt) {quantity -= quantity;}
+void UnitCargo::quantityIncrement(int32_t qnt) {this->quantity += qnt;}
+void UnitCargo::quantityDecrement(int32_t qnt) {this->quantity -= qnt;}
 
 
 

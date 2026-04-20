@@ -33,19 +33,19 @@ Status Warehouse::cargoIncrement(const UnitCargo& uc) {
 }
 
 Status Warehouse::cargoRemove(const UnitCargo& uc) {
-    UnitCargo* target = multi_c.getCargoByID(uc.getID());
+    const UnitCargo* target = multi_c.getCargoByID(uc.getID());
 
     if(target == nullptr) {return W_NOT_FOUND;}
     multi_c.removeCargo(uc.getID());
     return W_SUCCESS;
 }
 
-Status Warehouse::cargoDecrement(const UnitCargo& uc, uint32_t qnt) {
-    UnitCargo* target = multi_c.getCargoByID(uc.getID());
+Status Warehouse::cargoDecrement(const Item& item, uint32_t qnt) {
+    UnitCargo* target = multi_c.getCargoByID(item.identifier);
     if(target == nullptr) {return W_NOT_FOUND;}
 
     if(qnt >= target->getQuantity()) {
-        cargoRemove(uc);
+        cargoRemove(*target);
     } else {
         target->quantityDecrement(qnt);
     }

@@ -22,5 +22,5 @@ class Warehouse {
 
   Status cargoIncrement(const UnitCargo& uc);
   Status cargoRemove(const UnitCargo& uc);
-  Status cargoDecrement(const UnitCargo& uc, uint32_t qnt);
+  Status cargoDecrement(const Item& item, uint32_t qnt);
 };
