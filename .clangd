@@ -1,4 +1,0 @@
-CompileFlags:
-  Add:
-    - "-I/home/lucas_user/Desktop/Cpp_Coding/wms_project/include/core/"
-    - "-I/home/lucas_user/Desktop/Cpp_Coding/wms_project/include/gui/"
