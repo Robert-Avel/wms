@@ -10,4 +10,7 @@ SOURCE := $(shell find src -name "*.cpp")
 
 
 wms:
-	$(CXX) (INCLUDE) (SOURCE) -o robert-wms
+	$(CXX) $(INCLUDE) $(SOURCE) main.cpp -o robert-wms
+
+test-wms:
+	$(CXX) $(INCLUDE) $(SOURCE) test.cpp -o test-wms

@@ -1,10 +1,11 @@
 #include "item.hpp"
 #include "status.hpp"
+#include <cstdint>
 #include <unordered_map>
 
 
 class ItemData {
-    std::unordered_map<ID, Item> data;
+    std::unordered_map<uint32_t, Item> data;
 
     public:
     ItemData() = default;

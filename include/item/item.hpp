@@ -3,15 +3,14 @@
 #include <cstdint>
 #include <string>
 #include <stdint.h>
-
-typedef std::string ID;
+#include "identificator.hpp"
 typedef uint32_t cents;
 
 
 /*É a representação de um registro de um item */
 class Item {
 
-    ID identifier; //Codebar too
+    ID identificator; //Codebar too
     std::string global_name;
 
     double cubic;
@@ -20,15 +19,15 @@ class Item {
 
 
     public:
-    Item(ID identifier_, std::string global_name_, double m3_, double weight_, cents brute_value_):
-        identifier(identifier_), global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
+    Item(uint64_t identificator_, IdMode identificator_type,std::string global_name_, double m3_, double weight_, cents brute_value_):
+        identificator(identificator_, identificator_type), global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
 
 
-    const ID& getID() const;
-    std::string& getGlobalName() const;
+    std::string getID() const;
+    const std::string& getGlobalName() const;
     double getCubic() const;
     double getWeight() const;
     cents getBruteValue() const;
 
-     std::string formatData() const;
+    std::string formatData() const;
 };
