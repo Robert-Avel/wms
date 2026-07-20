@@ -23,7 +23,8 @@ class Item {
         identificator(identificator_, identificator_type), global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
 
 
-    std::string getID() const;
+    const uint64_t bruteID() const;
+    const ID& getID() const;
     const std::string& getGlobalName() const;
     double getCubic() const;
     double getWeight() const;

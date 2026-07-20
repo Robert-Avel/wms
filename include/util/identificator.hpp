@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 #include <string>
 
@@ -16,11 +18,13 @@ class ID {
     public:
     ID(uint64_t id_, IdMode std_mode_): id(id_), std_mode(std_mode_) {}
 
-    uint64_t getID() const;
+    uint64_t bruteID() const;
 
     std::string Str() const;
 
     std::string Str(IdMode m__) const;
+
+    IdMode getMode() const;
 
     bool operator==(const ID& other) {
         return this->id == other.id;

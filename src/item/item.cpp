@@ -6,9 +6,14 @@ inline double moneyFormatSimple(uint32_t __v) {
     return  __v / 100.0;
 }
 
-std::string Item::getID() const {
-    return this->identificator.Str();
+const ID& Item::getID() const {
+    return this->identificator;
 }
+
+const uint64_t Item::bruteID() const {
+    return this->identificator.bruteID();
+}
+
 const std::string& Item::getGlobalName() const {
     return this->global_name;
 }
@@ -18,7 +23,7 @@ cents Item::getBruteValue() const {return this->brute_value;}
 
 std::string Item::formatData() const {
     std::ostringstream buffer;
-    buffer << "ID: " << getID() << "\n"
+    buffer << "ID: " << getID().Str() << "\n"
            << "G_Name: " << global_name << "\n"
            << "M3: " << cubic << "\n"
            << "Weight: " << weight << "\n"

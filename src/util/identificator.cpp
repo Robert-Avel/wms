@@ -5,7 +5,7 @@
 #include <math.h>
 
 
-uint64_t ID::getID() const {
+uint64_t ID::bruteID() const {
     return this->id;
 }
 
@@ -14,6 +14,9 @@ std::string ID::Str() const {
     return Str(std_mode);
 }
 
+IdMode ID::getMode() const {
+    return this->std_mode;
+}
 
 
 std::string ID::Str(IdMode m__) const {
@@ -32,6 +35,7 @@ std::string ID::Str(IdMode m__) const {
 
         case OCTAL:
             return intToBase(this->id, 8);
+
         default:
             return "";
     }

@@ -1,3 +1,4 @@
+#pragma once
 #include "item.hpp"
 
 
@@ -22,7 +23,7 @@ class Volume {
 
     const ID& getGroup() const;
 
-    const ID& getFullID() const;
+    std::string getFullID() const;
 
     double getWeight() const;
 

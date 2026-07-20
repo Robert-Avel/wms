@@ -1,3 +1,5 @@
+#pragma once
+
 #include "item.hpp"
 #include "status.hpp"
 #include <cstdint>
@@ -10,10 +12,10 @@ class ItemData {
     public:
     ItemData() = default;
 
-    Status newItem(const Item& i);
-    Status newItem(ID identifier_, std::string global_name_, double m3_, double weight_, cents brute_value_);
+    Status newItem(const Item i);
+    Status newItem(const ID identifier_, const std::string global_name_, double m3_, double weight_, cents brute_value_);
 
-    Status removeItem(ID id);
+    Status removeItem(ID& id);
 
-    const Item* getItem(ID id);
+    const Item* getItem(ID& id);
 };
