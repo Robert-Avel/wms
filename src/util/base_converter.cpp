@@ -1,8 +1,22 @@
 #include "base_converter.hpp"
+#include <cmath>
+#include <cstdio>
+#include <math.h>
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <string>
+
+template <typename I>
+inline uint64_t m_pow(I base, I exp) {
+
+    if(exp == 0) {return 1;}
+    uint64_t acc = 1;
+    for(int i = 0; i < exp; i++) {
+        acc *= base;
+    }
+    return acc;
+}
 
 
 bool checkDigit(std::string code, uint8_t base, bool has_numbers) {
@@ -42,11 +56,13 @@ uint64_t BaseToInt(std::string code, uint8_t base, bool has_numbers) {
 
     const char* digit_base = has_numbers ? digit : digit_alphabetic;
     uint64_t acc = 0;
+    std::reverse(code.begin(), code.end());
 
     for(uint8_t c = 0; c < code.size(); c++) {
+        char current_char = code[c];
         for(uint8_t i = 0; i < base; i++) {
-            if(c == digit_base[i]) {
-                acc += i*(10*c);
+            if(current_char == digit_base[i]) {
+                acc += i * m_pow<uint64_t>(base, c);
                 break;
             }
         }
