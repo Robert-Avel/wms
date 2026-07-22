@@ -31,4 +31,6 @@ class Item {
     cents getBruteValue() const;
 
     std::string formatData() const;
+
+    bool saveData(std::ofstream& file);
 };

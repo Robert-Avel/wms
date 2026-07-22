@@ -1,6 +1,10 @@
 #include "item.hpp"
+#include <cstddef>
 #include <cstdint>
+#include <cstdio>
+#include <iostream>
 #include <sstream>
+#include <fstream>
 
 inline double moneyFormatSimple(uint32_t __v) {
     return  __v / 100.0;
@@ -30,4 +34,23 @@ std::string Item::formatData() const {
            << "Value: " << moneyFormatSimple(brute_value) << "\n";
 
     return buffer.str();
+}
+
+bool Item::saveData(std::ofstream& file) {
+    if (!file) {
+        std::cerr << "File is not open or its damaged\n";
+        return false;
+    }
+    file.write((char*) this->bruteID(), sizeof(uint64_t));
+
+    size_t g_name_size = global_name.size();
+    file.write((char*) &g_name_size, sizeof(size_t));
+    const char* g_name = global_name.c_str();
+    file.write((char*) &g_name, sizeof(char));
+
+    file.write((char*) &cubic, sizeof(double));
+    file.write((char*) &weight, sizeof(double));
+    file.write((char*) &brute_value, sizeof(cents));
+
+    return true;
 }

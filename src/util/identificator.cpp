@@ -9,7 +9,6 @@ uint64_t ID::bruteID() const {
     return this->id;
 }
 
-
 std::string ID::Str() const {
     return Str(std_mode);
 }

@@ -1,6 +1,8 @@
 #include "item_data.hpp"
 #include "item.hpp"
 #include "status.hpp"
+#include <cstdint>
+#include <iostream>
 
 
 Status ItemData::newItem(const Item i) {
@@ -36,4 +38,24 @@ const Item* ItemData::getItem(ID& id) {
         return nullptr;
     }
     return &data.at(id.bruteID());
+}
+
+
+bool ItemData::saveData(std::ofstream& file) {
+    if (!file) {
+        std::cerr << "File is not open or its damaged\n";
+        return false;
+    }
+
+    uint32_t db_size = data.size();
+    file.write((char*) &db_size, sizeof(uint32_t));
+
+    auto it = data.begin();
+    while (it != data.end()) {
+        if(!it->second.saveData(file)) {
+            return false;
+        }
+    }
+
+    return true;
 }
