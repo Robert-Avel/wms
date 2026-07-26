@@ -5,6 +5,15 @@
 #include <math.h>
 
 
+uint8_t ID::hasNum(IdMode i__) {
+    if(i__ == ALPHABETIC) {
+        return false;
+    }
+    return true;
+}
+
+
+
 uint64_t ID::bruteID() const {
     return this->id;
 }
