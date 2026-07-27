@@ -12,11 +12,11 @@ uint64_t ItemData::getNewID() {
 }
 
 
-const std::unordered_map<uint32_t, Item>::const_iterator ItemData::begin() {
+const ItemMap::const_iterator ItemData::begin() {
     return data.cbegin();
 }
 
-const std::unordered_map<uint32_t, Item>::const_iterator ItemData::end() {
+const ItemMap::const_iterator ItemData::end() {
     return data.cend();
 }
 
@@ -104,6 +104,7 @@ bool ItemData::saveData(std::ofstream& file) {
         if(!it->second.saveData(file)) {
             return false;
         }
+        it++;
     }
 
     return true;

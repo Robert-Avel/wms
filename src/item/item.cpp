@@ -64,7 +64,7 @@ Item::Item(std::ifstream& file) {
     file.read((char*) &weight_, sizeof(double));
     file.read((char*) &brute_value_, sizeof(cents));
 
-    this->identificator = ID(brute_value, id_mode_);
+    this->identificator = ID(brute_id_, id_mode_);
     this->global_name = g_name;
     this->cubic = cubic_;
     this->weight = weight_;
@@ -78,7 +78,7 @@ bool Item::saveData(std::ofstream& file) {
         return false;
     }
 
-    uint32_t b_brute_val = this->bruteID();
+    uint64_t b_brute_val = this->bruteID();
     IdMode b_mode = this->getID().getMode();
 
     file.write((char*) &b_brute_val, sizeof(uint64_t));

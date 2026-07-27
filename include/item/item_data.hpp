@@ -9,8 +9,11 @@
 #include <unordered_map>
 
 
+using ItemMap = std::unordered_map<uint32_t, Item>;
+
+
 class ItemData {
-    std::unordered_map<uint32_t, Item> data;
+    ItemMap data;
     IdMode code_mode;
     uint64_t next_id;
 
@@ -31,8 +34,8 @@ class ItemData {
     const Item* getItem(std::string& id);
 
 
-    const std::unordered_map<uint32_t, Item>::const_iterator begin();
-    const std::unordered_map<uint32_t, Item>::const_iterator end();
+    const ItemMap::const_iterator begin();
+    const ItemMap::const_iterator end();
 
     bool saveData(std::ofstream& file);
 };
