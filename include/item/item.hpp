@@ -29,6 +29,7 @@ class Item {
     const uint64_t bruteID() const;
     const ID& getID() const;
     const std::string& getGlobalName() const;
+    const std::string strID() const;
     double getCubic() const;
     double getWeight() const;
     cents getBruteValue() const;

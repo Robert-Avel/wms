@@ -23,6 +23,13 @@ const uint64_t Item::bruteID() const {
 const std::string& Item::getGlobalName() const {
     return this->global_name;
 }
+
+
+const std::string Item::strID() const {
+    return this->identificator.Str();
+}
+
+
 double Item::getCubic() const {return this->cubic;}
 double Item::getWeight() const {return this->weight;}
 cents Item::getBruteValue() const {return this->brute_value;}

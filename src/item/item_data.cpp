@@ -5,6 +5,7 @@
 #include "status.hpp"
 #include <cstdint>
 #include <iostream>
+#include <string>
 
 
 uint64_t ItemData::getNewID() {
@@ -81,9 +82,10 @@ const Item* ItemData::getItem(uint64_t id) {
     return &data.at(id);
 }
 
-const Item* ItemData::getItem(std::string& id) {
+const Item* ItemData::getItem(const std::string& id) {
     return getItem(BaseToInt(id, code_mode, ID::hasNum(code_mode)));
 }
+
 
 
 

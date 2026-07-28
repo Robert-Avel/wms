@@ -31,7 +31,8 @@ class ItemData {
     Status removeItem(std::string& id);
 
     const Item* getItem(uint64_t id);
-    const Item* getItem(std::string& id);
+    const Item* getItem(const std::string& id);
+    const Item* getItem(const char* id);
 
 
     const ItemMap::const_iterator begin();
