@@ -1,8 +1,10 @@
+#include "identificator.hpp"
 #include "include/interface.hpp"
 #include "item.hpp"
 #include "item_data.hpp"
 #include "status.hpp"
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <fstream>
 #include <ios>
@@ -25,9 +27,13 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-
+    main_i_data = new ItemData;
     inf.open("data.bin", std::ios::binary | std::ios::in);
-    main_i_data = new ItemData(inf);
+    if(inf.peek() == EOF) {
+        *main_i_data = ItemData(IdMode::HEXADECIMAL);
+    } else {
+        *main_i_data = ItemData(inf);
+    }
     inf.close();
 
     char* option = argv[1];
@@ -52,9 +58,29 @@ int main(int argc, char** argv) {
             } else std::cout << "Something going wrong\n";
         }
 
-        if(strcmp(sub_cmd, "mode") == 0) {
-            std::cout << "Command Here";
-            return 0;
+        //./wms item data <page>
+        if(strcmp(sub_cmd, "data") == 0 && argc == 4) {
+            int arg = std::atoi(argv[3]);
+
+            if(main_i_data->isEmpty()) {
+                std::cout << "Empty\n";
+                return 0;
+            }
+
+            int page = 1;
+            auto it = main_i_data->begin();
+            while (it != main_i_data->end()) {
+                if(page == arg) {
+                    std::cout << it->second.strID() << " | " << it->second.getGlobalName() << "\n";
+                }
+                if(page % 10 == 0) {page++;}
+                it++;
+            }
+        }
+
+        //./wms item mode get
+        if(strcmp(sub_cmd, "mode") == 0 && strcmp(argv[3], "get") == 0) {
+            std::cout << (int) main_i_data->getMode() << "\n";
         }
 
         outf.open("data.bin", std::ios::binary | std::ios::out | std::ios::trunc);

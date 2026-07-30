@@ -19,7 +19,7 @@ uint64_t ID::bruteID() const {
 }
 
 std::string ID::Str() const {
-    return Str(std_mode);
+    return this->Str(std_mode);
 }
 
 IdMode ID::getMode() const {

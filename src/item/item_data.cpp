@@ -8,17 +8,30 @@
 #include <string>
 
 
+bool ItemData::isEmpty() const {
+    return data.empty();
+}
+
+
+IdMode ItemData::getMode() const {
+    return code_mode;
+}
+uint64_t ItemData::showNexID() const {
+    return next_id;
+}
+
+
 uint64_t ItemData::getNewID() {
     return next_id++;
 }
 
 
-const ItemMap::const_iterator ItemData::begin() {
-    return data.cbegin();
+const ItemMap::iterator ItemData::begin() {
+    return data.begin();
 }
 
-const ItemMap::const_iterator ItemData::end() {
-    return data.cend();
+const ItemMap::iterator ItemData::end() {
+    return data.end();
 }
 
 
@@ -43,7 +56,7 @@ ItemData::ItemData(std::ifstream& file) {
 
 
 Status ItemData::newItem(const Item i) {
-    if (data.find(i.bruteID()) == data.end()) {
+    if (data.find(i.bruteID()) == data.end() || data.empty()) {
         data.insert({i.bruteID(), i});
         return SUCCESS;
     }

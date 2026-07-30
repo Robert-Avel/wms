@@ -34,9 +34,12 @@ class ItemData {
     const Item* getItem(const std::string& id);
     const Item* getItem(const char* id);
 
+    IdMode getMode() const;
+    uint64_t showNexID() const;
 
-    const ItemMap::const_iterator begin();
-    const ItemMap::const_iterator end();
+    const ItemMap::iterator begin();
+    const ItemMap::iterator end();
+    bool isEmpty() const;
 
     bool saveData(std::ofstream& file);
 };
