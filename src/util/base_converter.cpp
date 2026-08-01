@@ -7,21 +7,27 @@
 #include <cstring>
 #include <string>
 
+namespace basec {
+    static const char digit[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static const char digit_alphabetic[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+
 template <typename I>
 inline uint64_t m_pow(I base, I exp) {
 
     if(exp == 0) {return 1;}
     uint64_t acc = 1;
-    for(int i = 0; i < exp; i++) {
+    for(I i = 0; i < exp; i++) {
         acc *= base;
     }
     return acc;
 }
 
 
-bool checkDigit(std::string code, uint8_t base, bool has_numbers) {
-    const char* digit_base = has_numbers ? digit : digit_alphabetic;
+static bool checkDigit(std::string code, uint8_t base, bool has_numbers) {
+    const char* digit_base = has_numbers ? basec::digit : basec::digit_alphabetic;
     uint8_t len = strlen(digit_base);
+
 
     for(char& c: code) {
         for(uint8_t i = 0; i < len; i++) {
@@ -35,7 +41,11 @@ bool checkDigit(std::string code, uint8_t base, bool has_numbers) {
 
 
 static std::string convert(uint64_t value, uint8_t base, const char* using__) {
-    if (value == 0) {return "0";}
+    if (value == 0 ) {
+        if(using__ == basec::digit) {return "0";}
+        else return "A";
+    }
+
     if(base < 2 || base > strlen(using__)) {return "";}
 
     std::string buffer;
@@ -49,7 +59,7 @@ static std::string convert(uint64_t value, uint8_t base, const char* using__) {
 }
 
 
-uint64_t BaseToInt(std::string code, uint8_t base, bool has_numbers) {
+uint64_t basec::fbaseToInt(std::string code, uint8_t base, bool has_numbers) {
     if(!checkDigit(code, base, has_numbers)) {
         return 0;
     }
@@ -71,10 +81,39 @@ uint64_t BaseToInt(std::string code, uint8_t base, bool has_numbers) {
 }
 
 
-std::string intToBase(uint64_t value, uint8_t base) {
+std::string basec::fintToBase(uint64_t value, uint8_t base) {
     return convert(value, base, digit);
 }
 
-std::string intToAlphabetic(uint32_t value, uint8_t base) {
+std::string basec::intToBase(uint64_t value, StdMode mode_) {
+    switch (mode_) {
+        case NUMERIC:
+            return std::to_string(value);
+
+        case ALPHABETIC:
+            return basec::fintToAlphabetic(value);
+
+        case ALPHANUMERIC:
+            return basec::fintToBase(value);
+
+        case HEXADECIMAL:
+            return basec::fintToBase(value, 16);
+
+        case OCTAL:
+            return basec::fintToBase(value, 8);
+
+        default:
+            return "";
+    }
+}
+
+
+uint64_t basec::baseToInt(std::string code, basec::StdMode mode_) {
+    bool has_num =  mode_ != basec::StdMode::ALPHABETIC;
+
+    return basec::fbaseToInt(code, mode_, has_num);
+}
+
+std::string basec::fintToAlphabetic(uint32_t value, uint8_t base) {
     return convert(value, base, digit_alphabetic);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "item.hpp"
+#include "IDed_container.hpp"
 
 
 class Volume {

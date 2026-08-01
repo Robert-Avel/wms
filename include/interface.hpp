@@ -1,15 +1,17 @@
 #pragma once
-#include "identificator.hpp"
+#include "base_converter.hpp"
 #include "item.hpp"
-#include "item_data.hpp"
 #include "status.hpp"
+#include <fstream>
 
 
 namespace wmr {
     namespace item {
+        bool load(std::ifstream& file, std::string file_name);
+        bool save(std::ofstream& file, std::string file_name);
 
-    void setDataMode(ItemData& db, IdMode mode_);
-    Status create(ItemData& db,std::string name_, double m3_, double weight_, cents brute_value_);
-    const Item* get(ItemData& db,std::string id_);
+        void setDataMode(basec::StdMode mode_);
+        Status create(std::string name_, double m3_, double weight_, cents brute_value_);
+        const Item* get(std::string id_);
     }
 }
