@@ -1,17 +1,24 @@
 #pragma once
-#include "base_converter.hpp"
+#include "IDed_map.hpp"
 #include "item.hpp"
-#include "status.hpp"
-#include <fstream>
+#include <cstdint>
+#include <list>
+#include <string>
+#include <utility>
 
 
-namespace wmr {
-    namespace item {
-        bool load(std::ifstream& file, std::string file_name);
-        bool save(std::ofstream& file, std::string file_name);
+class WMRobert {
+    IDedMap<Item> itens;
+    std::string item_file_name;
 
-        void setDataMode(basec::StdMode mode_);
-        Status create(std::string name_, double m3_, double weight_, cents brute_value_);
-        const Item* get(std::string id_);
-    }
-}
+    public:
+        WMRobert() = default;
+
+        bool itemLoad();
+        bool itemSave();
+
+        ID itemNew(std::string name, double weight, double cubic, cents value);
+        Item* itemInfo(ID id_);
+        std::list<std::pair<ID, const Item*>> itemList(uint32_t page);
+        std::list<std::pair<ID, const Item*>> searchItem(std::string name);
+};
