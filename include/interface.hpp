@@ -12,13 +12,14 @@ class WMRobert {
     std::string item_file_name;
 
     public:
-        WMRobert() = default;
+        WMRobert(std::string item_file_name_):
+        itens(basec::StdMode::HEXADECIMAL), item_file_name(item_file_name_) {};
 
         bool itemLoad();
         bool itemSave();
 
-        ID itemNew(std::string name, double weight, double cubic, cents value);
-        Item* itemInfo(ID id_);
-        std::list<std::pair<ID, const Item*>> itemList(uint32_t page);
-        std::list<std::pair<ID, const Item*>> searchItem(std::string name);
+        cID itemNew(std::string name, double weight, double cubic, cents value);
+        Item* itemInfo(cID id_);
+        std::list<std::pair<cID, const Item*>> itemList(uint32_t page);
+        std::list<std::pair<cID, const Item*>> searchItem(std::string name);
 };

@@ -103,7 +103,7 @@ std::string basec::intToBase(uint64_t value, StdMode mode_) {
             return basec::fintToBase(value, 8);
 
         default:
-            return "";
+            return "ERR";
     }
 }
 

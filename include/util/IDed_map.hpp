@@ -8,7 +8,8 @@
 #include <unordered_map>
 
 
-typedef uint64_t ID;
+typedef uint64_t bID;
+typedef std::string cID;
 
 
 template <class T>
@@ -22,8 +23,10 @@ class IDedMap {
     public:
     IDedMap<T>() = default;
     IDedMap<T>(basec::StdMode code_mode_): code_mode(code_mode_), next_id(1) {};
+    IDedMap<T>(basec::StdMode code_mode_, uint64_t next_id_):
+    code_mode(code_mode_), next_id(next_id_) {};
 
-    ID append(const T& i);
+    bID append(const T& i);
 
     bool insert(uint64_t id, const T& i);
 
@@ -48,6 +51,7 @@ class IDedMap {
 
     void setMode(basec::StdMode nw_mode);
     uint64_t showNexID() const;
+    void setNexID(uint64_t id_);
 
     typename std::unordered_map<uint64_t, T>::iterator begin();
 

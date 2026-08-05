@@ -16,5 +16,8 @@ SOURCE := $(shell find src -name "*.cpp")
 wms:
 	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms
 
+wms-debug:
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms -DDEBUG
+
 test-wms:
 	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) test.cpp -o test-wms

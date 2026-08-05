@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <fstream>
 #include <ios>
+#include <iostream>
 #include <list>
 
 
@@ -11,15 +12,22 @@ bool WMRobert::itemLoad() {
     std::ifstream file(this->item_file_name, std::ios::in | std::ios::binary);
     if(!file) {return false;}
 
+    bID next_id;
     size_t size;
-    ID id;
+    bID id;
 
+    file.read((char*) &next_id, sizeof(bID));
+    this->itens.setNexID(next_id);
     file.read((char*) &size, sizeof(size_t));
     for(size_t i = 0; i < size; i++) {
-        file.read((char*) &id, sizeof(ID));
+        file.read((char*) &id, sizeof(bID));
         Item it = Item(file);
         itens.insert(id, it);
     }
+    #ifdef DEBUG
+    std::cout << "Itens loaded: " << itens.size() << "\n";
+    #endif
+
     return 0;
 }
 
@@ -29,12 +37,13 @@ bool WMRobert::itemSave() {
     if(!file) {return false;}
 
     size_t size = itens.size();
+    bID next_ID = itens.showNexID();
 
+    file.write((char*) &next_ID, sizeof(bID));
     file.write((char*) &size, sizeof(size_t));
-
     auto iter = itens.begin();
     while(iter != itens.end()) {
-        file.write((char*) &iter->first, sizeof(ID));
+        file.write((char*) &iter->first, sizeof(bID));
         iter->second.saveData(file);
         iter++;
     }
@@ -42,26 +51,26 @@ bool WMRobert::itemSave() {
 }
 
 
-ID WMRobert::itemNew(std::string name, double weight, double cubic, cents value) {
+cID WMRobert::itemNew(std::string name, double weight, double cubic, cents value) {
     Item i{name, cubic, weight, value};
-    return itens.append(i);
+    return this->itens.codeID(itens.append(i));
 }
 
-Item* WMRobert::itemInfo(ID id_) {
+Item* WMRobert::itemInfo(cID id_) {
     return itens.getItem(id_);
 }
 
 
-std::list<std::pair<ID, const Item*>> WMRobert::itemList(uint32_t page) {
-    std::list<std::pair<ID, const Item*>> output;
+std::list<std::pair<cID, const Item*>> WMRobert::itemList(uint32_t page) {
+    std::list<std::pair<cID, const Item*>> output;
 
     if(itens.isEmpty()) {return output;}
 
-    int i_page = 1;
+    unsigned int i_page = 1;
     auto it = itens.begin();
     while (it != itens.end()) {
         if(page == i_page) {
-            output.push_back({it->first, &it->second});
+            output.push_back({itens.codeID(it->first), &it->second});
         }
         if(page % 10 == 0) {page++;}
         it++;
@@ -70,14 +79,14 @@ std::list<std::pair<ID, const Item*>> WMRobert::itemList(uint32_t page) {
 }
 
 
-std::list<std::pair<ID, const Item*>> WMRobert::searchItem(std::string name) {
-    std::list<std::pair<ID, const Item*>> output;
+std::list<std::pair<cID, const Item*>> WMRobert::searchItem(std::string name) {
+    std::list<std::pair<cID, const Item*>> output;
     if(itens.isEmpty()) {return output;}
 
     auto it = itens.begin();
     while (it != itens.end()) {
         if(it->second.getGlobalName().find_first_of(name) != std::string::npos) {
-            output.push_back({it->first, &it->second});
+            output.push_back({itens.codeID(it->first), &it->second});
         }
         it++;
     }

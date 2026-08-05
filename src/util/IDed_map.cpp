@@ -19,6 +19,12 @@ uint64_t IDedMap<T>::showNexID() const {
     return next_id;
 }
 
+template<class T>
+void IDedMap<T>::setNexID(uint64_t id_) {
+    this->next_id = id_;
+}
+
+
 
 template<class T>
 uint64_t IDedMap<T>::getNewID() {
@@ -37,8 +43,8 @@ typename std::unordered_map<uint64_t, T>::iterator IDedMap<T>::end() {
 
 
 template <class T>
-ID IDedMap<T>::append(const T& i) {
-    ID id = getNewID();
+bID IDedMap<T>::append(const T& i) {
+    bID id = getNewID();
     data.insert({id, i});
     return id;
 }
