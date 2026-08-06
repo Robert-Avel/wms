@@ -1,9 +1,12 @@
+#include "command.hpp"
 #include "include/interface.hpp"
+#include "item.hpp"
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string.h>
+#include <utility>
 
 static WMRobert syst("WMR.bin");
 
@@ -21,16 +24,16 @@ int main(int argc, char** argv) {
     std::cout << "\n";
     #endif
 
-    if(strcmp(argv[1], "item") == 0)
+    if(strcmp(argv[1], ITEM) == 0)
     {
         //item new <name> <weight> <cubic> <value>
-        if(strcmp(argv[2], "new") == 0 && argc == 7) {
+        if(strcmp(argv[2], CNEW) == 0 && argc == 7) {
             cID i = syst.itemNew(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
             std::cout << "A new item was created with the ID " << i << '\n';
         }
     }
         //item info <id>
-        if(strcmp(argv[2], "info") == 0 && argc == 4) {
+        if(strcmp(argv[2], CINFO) == 0 && argc == 4) {
             Item* it = syst.itemInfo(argv[3]);
             if(it == nullptr) {
                 std::cout << "No iten Found with this ID\n";
@@ -38,10 +41,30 @@ int main(int argc, char** argv) {
                 std::cout << it->formatData();
             }
         }
-    //item list <page>
-    //item search <name>
 
-    //volume new <item_id>
+        //item list <page>
+        if(strcmp(argv[2], CLIST) == 0 && argc == 4) {
+            auto it = syst.itemList(std::atoi(argv[3]));
+
+            if(it.empty()) {std::cout << "No itens\n";}
+
+            for(std::pair<cID, const Item *> pp: it) {
+                std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
+            }
+        }
+
+        //item search <name>
+        if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
+            auto it = syst.searchItem(argv[3]);
+
+            if(it.empty()) {std::cout << "No itens\n";}
+
+            for(std::pair<cID, const Item *> pp: it) {
+                std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
+            }
+        }
+
+    //volume new <item_
     //volume get <id>
     //volume search batch <batch>
     //volume search item <item_id>

@@ -2,6 +2,7 @@
 #include "item.hpp"
 #include "interface.hpp"
 #include <cstddef>
+#include <cstdint>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -67,13 +68,12 @@ std::list<std::pair<cID, const Item*>> WMRobert::itemList(uint32_t page) {
     if(itens.isEmpty()) {return output;}
 
     unsigned int i_page = 1;
-    auto it = itens.begin();
-    while (it != itens.end()) {
+    for (uint64_t it_id = 1; it_id <= itens.size(); it_id++) {
         if(page == i_page) {
-            output.push_back({itens.codeID(it->first), &it->second});
+            Item* i = this->itens.getItem(it_id);
+            output.push_back({itens.codeID(it_id), i});
         }
-        if(page % 10 == 0) {page++;}
-        it++;
+        if(page % 10 == 0) {i_page++;}
     }
     return output;
 }
@@ -85,7 +85,7 @@ std::list<std::pair<cID, const Item*>> WMRobert::searchItem(std::string name) {
 
     auto it = itens.begin();
     while (it != itens.end()) {
-        if(it->second.getGlobalName().find_first_of(name) != std::string::npos) {
+        if(it->second.getGlobalName().find_first_of(name) != it->second.getGlobalName().npos) {
             output.push_back({itens.codeID(it->first), &it->second});
         }
         it++;
