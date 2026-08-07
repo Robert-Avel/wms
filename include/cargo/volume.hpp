@@ -1,12 +1,12 @@
 #pragma once
 #include "item.hpp"
-#include "IDed_container.hpp"
+#include "IDed_map.hpp"
 
 
 class Volume {
-    ID item_id;
-    ID volume_batch;
-    ID volume_id;
+    bID item_id;
+    bID volume_batch;
+    bID volume_id;
 
 
     double weight;
@@ -15,16 +15,16 @@ class Volume {
 
 
     public:
-    Volume(const ID item_id_, const ID volume_id_, const ID volume_batch_, double weight_, double m3_):
+    Volume(const bID item_id_, const bID volume_id_, const bID volume_batch_, double weight_, double m3_):
         item_id(item_id_), volume_batch(volume_batch_), volume_id(volume_id_), weight(weight_), volume_m3(m3_) {}
 
-    const ID& getItemID() const;
+    const bID& getItemID() const;
 
-    const ID& getID() const;
+    const bID& getID() const;
 
-    const ID& getGroup() const;
+    const bID& getGroup() const;
 
-    std::string getFullID() const;
+    cID getFullID() const;
 
     double getWeight() const;
 

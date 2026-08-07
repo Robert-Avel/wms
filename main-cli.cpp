@@ -1,3 +1,4 @@
+#include "base_converter.hpp"
 #include "command.hpp"
 #include "include/interface.hpp"
 #include "item.hpp"
@@ -8,7 +9,7 @@
 #include <string.h>
 #include <utility>
 
-static WMRobert syst("WMR.bin");
+static ItemSys syst("WMR.bin", basec::NUMERIC);
 
 
 int main(int argc, char** argv) {
@@ -17,7 +18,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    syst.itemLoad();
+    syst.load();
 
     #ifdef DEBUG
     for(int i = 0; i < argc; i++) {std::cout << argv[i] << " ";}
@@ -28,13 +29,13 @@ int main(int argc, char** argv) {
     {
         //item new <name> <weight> <cubic> <value>
         if(strcmp(argv[2], CNEW) == 0 && argc == 7) {
-            cID i = syst.itemNew(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
+            cID i = syst.create(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
             std::cout << "A new item was created with the ID " << i << '\n';
         }
     }
         //item info <id>
         if(strcmp(argv[2], CINFO) == 0 && argc == 4) {
-            Item* it = syst.itemInfo(argv[3]);
+            Item* it = syst.info(argv[3]);
             if(it == nullptr) {
                 std::cout << "No iten Found with this ID\n";
             } else {
@@ -44,7 +45,7 @@ int main(int argc, char** argv) {
 
         //item list <page>
         if(strcmp(argv[2], CLIST) == 0 && argc == 4) {
-            auto it = syst.itemList(std::atoi(argv[3]));
+            auto it = syst.list(std::atoi(argv[3]));
 
             if(it.empty()) {std::cout << "No itens\n";}
 
@@ -55,7 +56,7 @@ int main(int argc, char** argv) {
 
         //item search <name>
         if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
-            auto it = syst.searchItem(argv[3]);
+            auto it = syst.search(argv[3]);
 
             if(it.empty()) {std::cout << "No itens\n";}
 
@@ -84,5 +85,5 @@ int main(int argc, char** argv) {
 
     //./wms item get <id> -> item
 
-    syst.itemSave();
+    syst.save();
 }

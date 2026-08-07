@@ -1,16 +1,9 @@
-#include "base_converter.hpp"
 #include "IDed_map.hpp"
 #include <cstdint>
-#include <string>
 
 template<class T>
 bool IDedMap<T>::isEmpty() const {
     return data.empty();
-}
-
-template<class T>
-basec::StdMode IDedMap<T>::getMode() const {
-    return code_mode;
 }
 
 
@@ -23,8 +16,6 @@ template<class T>
 void IDedMap<T>::setNexID(uint64_t id_) {
     this->next_id = id_;
 }
-
-
 
 template<class T>
 uint64_t IDedMap<T>::getNewID() {
@@ -60,18 +51,6 @@ bool IDedMap<T>::insert(uint64_t id, const T& i) {
 
 
 template <class T>
-std::string IDedMap<T>::codeID(uint64_t id__) const {
-    return basec::intToBase(id__, code_mode);
-}
-
-
-template <class T>
-uint64_t IDedMap<T>::trueID(std::string id__) const {
-    return basec::baseToInt(id__, code_mode);
-}
-
-
-template <class T>
 bool IDedMap<T>::erase(uint64_t id) {
     if (data.find(id) == data.end()) {
         return false;
@@ -82,11 +61,6 @@ bool IDedMap<T>::erase(uint64_t id) {
 
 
 template <class T>
-bool IDedMap<T>::erase(std::string& id) {
-    return erase(IDedMap<T>::trueID(id));
-}
-
-template <class T>
 T* IDedMap<T>::getItem(uint64_t id) {
     if (data.find(id) == data.end()) {
         return nullptr;
@@ -95,16 +69,6 @@ T* IDedMap<T>::getItem(uint64_t id) {
 }
 
 template <class T>
-T* IDedMap<T>::getItem(const std::string& id) {
-    return getItem(IDedMap<T>::trueID(id));
-}
-
-template <class T>
 size_t IDedMap<T>::size() const {
     return data.size();
-}
-
-template <class T>
-void IDedMap<T>::setMode(basec::StdMode nw_mode) {
-    this->code_mode = nw_mode;
 }
