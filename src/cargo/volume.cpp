@@ -2,12 +2,9 @@
 #include "IDed_map.hpp"
 #include "get_bytes.hpp"
 #include <cstring>
-#include <cstddef>
 #include <cstring>
 #include <iostream>
 #include <sstream>
-#include <string.h>
-#include <vector>
 
 
 const bID& Volume::getItemID() const {
@@ -44,62 +41,25 @@ std::string Volume::formatData() const {
 }
 
 
-std::vector<std::byte> Volume::getBytes() const {
-    void* members[] = {
-        (void*)&item_id,
-        (void*)&volume_id,
-        (void*)&volume_batch,
-        (void*)&weight,
-        (void*)&volume_m3,
-        (void*)&value
-    };
+ByteS Volume::getBytes() const {
+    ByteS buffer{};
 
-    size_t sizes[] = {
-        sizeof(item_id),
-        sizeof(volume_id),
-        sizeof(volume_batch),
-        sizeof(weight),
-        sizeof(volume_m3),
-        sizeof(value)
-    };
+    buffer << item_id;
+    //buffer << volume_id;
+    //buffer << volume_batch;
+    //buffer << weight;
+    //buffer << volume_m3;
+    //buffer << value;
 
-
-    size_t objc_size = 0;
-    for(size_t s: sizes) {objc_size += s;}
-
-    std::vector<std::byte> output(objc_size);
-    std::byte* data_ptr = output.data();
-    for(int i = 0; i < 6; i++) {
-        std::memcpy(data_ptr, members[i], sizes[i]);
-        data_ptr += sizeof(sizes[i]);
-    }
-
-    return output;
+    return buffer;
 }
 
 
-Volume::Volume(std::vector<std::byte> data) {
-    void* members[] = {
-        (void*)&item_id,
-        (void*)&volume_id,
-        (void*)&volume_batch,
-        (void*)&weight,
-        (void*)&volume_m3,
-        (void*)&value
-    };
-
-    size_t sizes[] = {
-        sizeof(item_id),
-        sizeof(volume_id),
-        sizeof(volume_batch),
-        sizeof(weight),
-        sizeof(volume_m3),
-        sizeof(value)
-    };
-
-    auto data_ptr = data.data();
-    for(int i = 0; i < 6; i++) {
-        std::memcpy(members[i], data_ptr, sizes[i]);
-        data_ptr += sizeof(sizes[i]);
-    }
+Volume::Volume(ByteS& data) {
+    this->value = 0;
+    this->volume_m3 = 0;
+    this->weight = 0;
+    this->volume_batch = 0;
+    this->volume_id = 0;
+    data >> this->item_id;
 }

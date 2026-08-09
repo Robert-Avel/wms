@@ -17,7 +17,7 @@ wms:
 	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms
 
 wms-debug:
-	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms -DDEBUG
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms -DDEBUG -g
 
 test-wms:
-	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) test.cpp -o test-wms
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) test.cpp -o test-wms -g

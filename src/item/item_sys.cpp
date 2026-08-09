@@ -18,9 +18,7 @@ bool ItemSys::load() {
         Item it = Item(file);
         itens.insert(id, it);
     }
-    #ifdef DEBUG
-    std::cout << "Itens loaded: " << itens.size() << "\n";
-    #endif
+
 
     return 0;
 }

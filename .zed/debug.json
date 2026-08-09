@@ -1,0 +1,18 @@
+// Project-local debug tasks
+//
+// For more documentation on how to configure debug tasks,
+// see: https://zed.dev/docs/debugger
+[
+  {
+    "label": "ACode",
+    "adapter": "CodeLLDB",
+    "name": "Launch",
+    "type": "node",
+    "request": "launch",
+    "program": "/home/lucas/Área de trabalho/Cpp_Projects/wms/test-wms",
+    "build": {
+      "command": "make",
+      "args": ["test-wms"]
+    }
+  }
+]

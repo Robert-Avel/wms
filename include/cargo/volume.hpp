@@ -1,6 +1,7 @@
 #pragma once
 #include "item.hpp"
 #include "IDed_map.hpp"
+#include "byte_serializator.hpp"
 #include <cstddef>
 #include <vector>
 
@@ -21,7 +22,7 @@ class Volume {
         item_id(item_id_), volume_batch(volume_batch_), volume_id(volume_id_), weight(weight_), volume_m3(m3_), value(value_) {}
 
 
-    Volume(std::vector<std::byte> data);
+    Volume(ByteS& data);
     const bID& getItemID() const;
 
     const bID& getID() const;
@@ -36,5 +37,5 @@ class Volume {
 
     std::string formatData() const;
 
-    std::vector<std::byte> getBytes() const;
+    ByteS getBytes() const;
 };
