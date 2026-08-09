@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
             }
         }
 
-    //volume new <item_
+    //volume new <item_id>
     //volume get <id>
     //volume search batch <batch>
     //volume search item <item_id>

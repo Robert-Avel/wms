@@ -55,6 +55,14 @@ ByteS::~ByteS() {
     }
 }
 
+
+ByteS& ByteS::operator<<(const ByteS& other) {
+    this->append((char*) other._data, other._size);
+    return *this;
+}
+
+
+
 ByteS& ByteS::append(char* _src, size_t __s) {
     if (_size + __s > allocated) {
         expand(_size + __s - allocated);

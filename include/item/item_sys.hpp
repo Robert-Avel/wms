@@ -1,4 +1,5 @@
 #include "base_converter.hpp"
+#include "byte_serializator.hpp"
 #include "item.hpp"
 #include "IDed_map.hpp"
 #include <list>
@@ -6,14 +7,13 @@
 
 class ItemSys {
     IDedMap<Item> itens;
-    std::string item_db_name;
     basec::StdMode code_mode;
 
     public:
-    bool load();
-    bool save();
+    ByteS getByte();
 
-    ItemSys(std::string db_name, basec::StdMode mode): item_db_name(db_name), code_mode(mode) {}
+    ItemSys(basec::StdMode mode): code_mode(mode) {}
+    ItemSys(ByteS& __bs);
 
     cID create(std::string name, double weight, double cubic, cents value);
     Item* info(cID id_);

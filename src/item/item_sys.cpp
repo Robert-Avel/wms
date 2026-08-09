@@ -1,45 +1,41 @@
 #include "item_sys.hpp"
 #include "base_converter.hpp"
+#include "byte_serializator.hpp"
+#include <cstddef>
 
 
-bool ItemSys::load() {
-    std::ifstream file(this->item_db_name, std::ios::in | std::ios::binary);
-    if(!file) {return false;}
-
-    bID next_id;
-    size_t size;
-    bID id;
-
-    file.read((char*) &next_id, sizeof(bID));
-    this->itens.setNexID(next_id);
-    file.read((char*) &size, sizeof(size_t));
-    for(size_t i = 0; i < size; i++) {
-        file.read((char*) &id, sizeof(bID));
-        Item it = Item(file);
-        itens.insert(id, it);
-    }
-
-
-    return 0;
-}
-
-
-bool ItemSys::save() {
-    std::ofstream file(this->item_db_name, std::ios::out | std::ios::binary | std::ios::trunc);
-    if(!file) {return false;}
+ByteS ItemSys::getByte() {
+    ByteS buffer{};
 
     size_t size = itens.size();
     bID next_ID = itens.showNexID();
 
-    file.write((char*) &next_ID, sizeof(bID));
-    file.write((char*) &size, sizeof(size_t));
+    buffer.append((char*) &next_ID, sizeof(bID));
+    buffer.append((char*) &size, sizeof(size));
+
     auto iter = itens.begin();
     while(iter != itens.end()) {
-        file.write((char*) &iter->first, sizeof(bID));
-        iter->second.saveData(file);
+        buffer.append((char*) &iter->first, sizeof(bID));
+        buffer << iter->second.getBytes();
         iter++;
     }
-    return true;
+    return buffer;
+}
+
+
+ItemSys::ItemSys(ByteS& __bs) {
+    size_t item_n;
+    bID next_ID;
+    this->itens.setNexID(next_ID);
+
+    __bs.pop((char*) &item_n, sizeof(size_t));
+    __bs.pop((char*) &next_ID, sizeof(bID));
+
+    bID id;
+    for(size_t i = 0; i < item_n; i++) {
+        __bs.pop((char*) &id, sizeof(bID));
+        this->itens.insert(id, {__bs});
+    }
 }
 
 

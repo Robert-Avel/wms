@@ -15,6 +15,7 @@ class ByteS {
     ByteS();
     ~ByteS();
 
+    ByteS& operator<<(const ByteS& other);
 
     ByteS& append(char* _src, size_t __s);
     ByteS& append(std::string& __src);
