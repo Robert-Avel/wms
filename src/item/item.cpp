@@ -1,4 +1,5 @@
 #include "item.hpp"
+#include "byte_serializator.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -59,6 +60,15 @@ Item::Item(std::ifstream& file) {
 }
 
 
+Item::Item(ByteS& __bs) {
+    __bs.pop(this->global_name);
+    __bs.pop((char*) &this->cubic, sizeof(cubic));
+    __bs.pop((char*) &this->weight, sizeof(weight));
+    __bs.pop((char*) &this->brute_value, sizeof(brute_value));
+}
+
+
+
 bool Item::saveData(std::ofstream& file) {
     if (!file) {
         std::cerr << "File is not open or its damaged\n";
@@ -74,4 +84,14 @@ bool Item::saveData(std::ofstream& file) {
     file.write((char*) &brute_value, sizeof(cents));
 
     return true;
+}
+
+
+ByteS Item::getBytes() {
+    ByteS buffer{};
+    buffer.append(global_name)
+        .append((char*) &cubic, sizeof(cubic))
+        .append((char*) &weight,sizeof(weight))
+        .append((char*) &brute_value, sizeof(brute_value));
+    return buffer;
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "byte_serializator.hpp"
 #include <cstdint>
 #include <fstream>
 #include <string>
@@ -22,6 +23,7 @@ class Item {
     Item(std::string global_name_, double m3_, double weight_, cents brute_value_):
         global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
 
+    Item(ByteS& __bs);
     Item(std::ifstream& file);
 
     const std::string& getGlobalName() const;
@@ -32,4 +34,6 @@ class Item {
     std::string formatData() const;
 
     bool saveData(std::ofstream& file);
+
+    ByteS getBytes();
 };

@@ -1,6 +1,6 @@
+#pragma once
 #include <cstddef>
-
-
+#include <string>
 
 
 class ByteS {
@@ -15,11 +15,13 @@ class ByteS {
     ByteS();
     ~ByteS();
 
-    template<typename T>
-    ByteS& operator<<(const T& other);
 
-    template<typename T>
-    bool operator>>(T& other);
+    ByteS& append(char* _src, size_t __s);
+    ByteS& append(std::string& __src);
+
+    bool pop(char* __dest, size_t __s);
+    bool pop(std::string& __src);
+
 
     unsigned char* data();
     size_t size();

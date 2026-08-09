@@ -55,47 +55,60 @@ ByteS::~ByteS() {
     }
 }
 
-template<typename T>
-ByteS& ByteS::operator<<(const T& other) {
-    size_t other_size = sizeof(other);
-    if (_size + other_size > allocated) {
-        expand(_size + other_size - allocated);
+ByteS& ByteS::append(char* _src, size_t __s) {
+    if (_size + __s > allocated) {
+        expand(_size + __s - allocated);
     }
 
-    const unsigned char* input_ptr = reinterpret_cast<const unsigned char*>(&other);
     unsigned char* data_ptr = _data + _size;
-    memcpy(data_ptr, input_ptr, other_size);
+    memcpy(data_ptr, _src, __s);
+    _size += __s;
+
+    return *this;
+}
+
+
+ByteS& ByteS::append(std::string& __src) {
+    size_t other_size = __src.size();
+
+    this->append( (char*) &other_size, sizeof(size_t));
+
+    expand(other_size);
+    memcpy(this->_data + _size, __src.data(), other_size);
     _size += other_size;
 
     return *this;
 }
 
 
-template<typename T>
-bool ByteS::operator>>(T& other) {
-    size_t other_size = sizeof(other);
-    if(_size < other_size) {
+bool ByteS::pop(std::string& __dest) {
+    if(_size < sizeof(__dest)) {return false;}
+
+    size_t other_size;
+    this->pop( (char*) &other_size, sizeof(size_t));
+
+    __dest.resize(other_size);
+    memcpy(__dest.data(), this->_data, other_size);
+    memmove(_data, _data + other_size, _size);
+    collapse(other_size);
+
+    return true;
+}
+
+
+bool ByteS::pop(char* __dest, size_t __s) {
+    if(_size < __s) {
         return false;
     }
 
-    unsigned char* output_ptr = reinterpret_cast<unsigned char*>(&other);
-    unsigned char* data_ptr = _data + _size - other_size;
-    memcpy(output_ptr, data_ptr, other_size);
-    _size -= other_size;
-    collapse(other_size);
+    unsigned char* data_ptr = _data;
+    memcpy(__dest, data_ptr, __s);
+    _size -= __s;
+    memmove(_data, _data + __s, _size);
+    collapse(__s);
 
     return true;
 }
 
 unsigned char* ByteS::data() {return _data;}
 size_t ByteS::size() {return _size;}
-
-
-template ByteS& ByteS::operator<< <ByteS>(const ByteS& other);
-template ByteS& ByteS::operator<< <unsigned long>(const unsigned long& other);
-template ByteS& ByteS::operator<< <double>(const double& other);
-template ByteS& ByteS::operator<< <unsigned int>(const unsigned int& other);
-
-template bool ByteS::operator>><unsigned int>(unsigned int&);
-template bool ByteS::operator>><double>(double&);
-template bool ByteS::operator>><unsigned long>(unsigned long&);

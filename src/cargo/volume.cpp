@@ -1,6 +1,6 @@
 #include "volume.hpp"
 #include "IDed_map.hpp"
-#include "get_bytes.hpp"
+#include "byte_serializator.hpp"
 #include <cstring>
 #include <cstring>
 #include <iostream>
@@ -44,22 +44,22 @@ std::string Volume::formatData() const {
 ByteS Volume::getBytes() const {
     ByteS buffer{};
 
-    buffer << item_id;
-    //buffer << volume_id;
-    //buffer << volume_batch;
-    //buffer << weight;
-    //buffer << volume_m3;
-    //buffer << value;
+    buffer.append((char*)&item_id, sizeof(item_id))
+        .append((char*)&volume_id, sizeof(volume_id))
+        .append((char*)&volume_batch, sizeof(volume_batch))
+        .append((char*)&weight, sizeof(weight))
+        .append((char*)&volume_m3, sizeof(volume_m3))
+        .append((char*)&value, sizeof(value));
 
     return buffer;
 }
 
 
 Volume::Volume(ByteS& data) {
-    this->value = 0;
-    this->volume_m3 = 0;
-    this->weight = 0;
-    this->volume_batch = 0;
-    this->volume_id = 0;
-    data >> this->item_id;
+    data.pop((char*)&this->item_id, sizeof(item_id));
+    data.pop((char*)&this->volume_id, sizeof(volume_id));
+    data.pop((char*)&this->volume_batch, sizeof(volume_batch));
+    data.pop((char*)&this->weight, sizeof(weight));
+    data.pop((char*)&this->volume_m3, sizeof(volume_m3));
+    data.pop((char*)&this->value, sizeof(value));
 }

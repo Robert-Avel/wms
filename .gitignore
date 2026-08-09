@@ -5,3 +5,4 @@ robert-wms
 *.txt
 test-wms
 *.bin
+*.json
