@@ -34,8 +34,8 @@ typename std::unordered_map<uint64_t, T>::iterator IDedMap<T>::end() {
 
 
 template <class T>
-bID IDedMap<T>::append(const T& i) {
-    bID id = getNewID();
+uint64_t IDedMap<T>::append(const T& i) {
+    uint64_t id = getNewID();
     data.insert({id, i});
     return id;
 }

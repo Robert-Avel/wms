@@ -2,12 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <string>
 #include <unordered_map>
-
-
-typedef uint64_t bID;
-typedef std::string cID;
 
 
 template <class T>
@@ -21,7 +16,7 @@ class IDedMap {
     IDedMap<T>(): next_id(1) {};
     IDedMap<T>(uint64_t next_id_): next_id(next_id_) {};
 
-    bID append(const T& i);
+    uint64_t append(const T& i);
 
     bool insert(uint64_t id, const T& i);
 

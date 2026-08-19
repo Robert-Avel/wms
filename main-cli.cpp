@@ -1,15 +1,18 @@
+#include "IDed_map.hpp"
 #include "base_converter.hpp"
 #include "command.hpp"
-#include "include/interface.hpp"
 #include "item.hpp"
+#include "interface.hpp"
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string.h>
-#include <utility>
 
-static ItemSys syst("WMR.bin", basec::NUMERIC);
+
+static WMRobert syst;
+
+std::string ITEM_DB = "item.bin";
 
 
 int main(int argc, char** argv) {
@@ -18,24 +21,19 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    syst.load();
-
-    #ifdef DEBUG
-    for(int i = 0; i < argc; i++) {std::cout << argv[i] << " ";}
-    std::cout << "\n";
-    #endif
 
     if(strcmp(argv[1], ITEM) == 0)
     {
+        syst.data_module.loadItem(ITEM_DB);
         //item new <name> <weight> <cubic> <value>
         if(strcmp(argv[2], CNEW) == 0 && argc == 7) {
-            cID i = syst.create(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
+            bruteID i = syst.item_module.create(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
             std::cout << "A new item was created with the ID " << i << '\n';
         }
     }
         //item info <id>
         if(strcmp(argv[2], CINFO) == 0 && argc == 4) {
-            Item* it = syst.info(argv[3]);
+            Item* it = syst.item_module.info(std::atoi(argv[3]));
             if(it == nullptr) {
                 std::cout << "No iten Found with this ID\n";
             } else {
@@ -45,26 +43,26 @@ int main(int argc, char** argv) {
 
         //item list <page>
         if(strcmp(argv[2], CLIST) == 0 && argc == 4) {
-            auto it = syst.list(std::atoi(argv[3]));
+            auto it = syst.item_module.list(std::atoi(argv[3]));
 
             if(it.empty()) {std::cout << "No itens\n";}
 
-            for(std::pair<cID, const Item *> pp: it) {
+            for(std::pair<bruteID, const Item *> pp: it) {
                 std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
             }
         }
 
         //item search <name>
         if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
-            auto it = syst.search(argv[3]);
+            auto it = syst.item_module.search(argv[3]);
 
             if(it.empty()) {std::cout << "No itens\n";}
 
-            for(std::pair<cID, const Item *> pp: it) {
+            for(std::pair<bruteID, const Item *> pp: it) {
                 std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
             }
         }
-
+        syst.data_module.saveItem(ITEM_DB);
     //volume new <item_id>
     //volume get <id>
     //volume search batch <batch>
@@ -85,5 +83,5 @@ int main(int argc, char** argv) {
 
     //./wms item get <id> -> item
 
-    syst.save();
+    //syst.save(ITEM_D);
 }

@@ -1,21 +1,12 @@
 #pragma once
 #include "item_sys.hpp"
-#include "IDed_map.hpp"
-#include "base_converter.hpp"
-#include "config_wms.hpp"
-#include "item.hpp"
-#include <cstdint>
-#include <list>
-#include <string>
-#include <utility>
-
-#define CONFIG_FILE "config_wms.bin"
+#include "data_manager.hpp"
 
 
 class WMRobert {
-    ItemSys item_mod;
     public:
-        WMRobert();
+        WMRobert(): item_module(data_module.item_d) {}
 
-
+        DataManager data_module;
+        ItemSys item_module;
 };

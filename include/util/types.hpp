@@ -1,4 +1,7 @@
 #pragma once
+#include <cstdint>
+#include <string>
+
 enum Status {
     SUCCESS,
     NOT_FOUND,
@@ -8,3 +11,7 @@ enum Status {
     FULL,
     NOT_SELECTED
 };
+
+
+typedef uint64_t bruteID;
+typedef std::string TextID;

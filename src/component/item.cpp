@@ -1,5 +1,4 @@
 #include "item.hpp"
-#include "byte_serializator.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -11,7 +10,6 @@
 inline double moneyFormatSimple(uint32_t __v) {
     return  __v / 100.0;
 }
-
 
 
 const std::string& Item::getGlobalName() const {
@@ -32,7 +30,7 @@ std::string Item::formatData() const {
     return buffer.str();
 }
 
-Item::Item(std::ifstream& file) {
+Item::Item(std::ifstream& file) : IDedObj() {
     if (!file) {
         std::cerr << "File is not open or its damaged\n";
         return;
@@ -60,14 +58,6 @@ Item::Item(std::ifstream& file) {
 }
 
 
-Item::Item(ByteS& __bs) {
-    __bs.pop(this->global_name);
-    __bs.pop((char*) &this->cubic, sizeof(cubic));
-    __bs.pop((char*) &this->weight, sizeof(weight));
-    __bs.pop((char*) &this->brute_value, sizeof(brute_value));
-}
-
-
 
 bool Item::saveData(std::ofstream& file) {
     if (!file) {
@@ -84,14 +74,4 @@ bool Item::saveData(std::ofstream& file) {
     file.write((char*) &brute_value, sizeof(cents));
 
     return true;
-}
-
-
-ByteS Item::getBytes() {
-    ByteS buffer{};
-    buffer.append(global_name)
-        .append((char*) &cubic, sizeof(cubic))
-        .append((char*) &weight,sizeof(weight))
-        .append((char*) &brute_value, sizeof(brute_value));
-    return buffer;
 }

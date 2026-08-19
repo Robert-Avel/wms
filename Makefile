@@ -1,9 +1,10 @@
 CXX := g++
 INCLUDE := \
--I./include/cargo \
--I./include/item \
+-I./include/component \
+-I./include/systens \
 -I./include/util \
 -I./include/
+
 
 CFLAGS := -Wall
 
