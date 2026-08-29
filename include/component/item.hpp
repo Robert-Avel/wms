@@ -5,6 +5,7 @@
 #include <string>
 #include <stdint.h>
 #include "IDed_obj.hpp"
+#include "byte_serializator.hpp"
 typedef uint32_t cents;
 
 
@@ -19,10 +20,10 @@ class Item: public IDedObj {
 
     public:
     Item() = default;
-    Item(std::string global_name_, double m3_, double weight_, cents brute_value_):
-         IDedObj(), global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
+    Item(std::string global_name_, double m3_, double weight_, cents brute_value_, uint64_t id = 0, uint64_t group = 0):
+         IDedObj(id, group), global_name(global_name_), cubic(m3_), weight(weight_), brute_value(brute_value_) {}
 
-    Item(std::ifstream& file);
+    Item(ByteS& bytes);
 
 
     const std::string& getGlobalName() const;
@@ -32,6 +33,5 @@ class Item: public IDedObj {
 
     std::string formatData() const;
 
-    bool saveData(std::ofstream& file);
-
+    ByteS getBytes();
 };

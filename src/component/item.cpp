@@ -1,10 +1,10 @@
 #include "item.hpp"
+#include "byte_serializator.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <string>
 
 inline double moneyFormatSimple(uint32_t __v) {
@@ -30,48 +30,32 @@ std::string Item::formatData() const {
     return buffer.str();
 }
 
-Item::Item(std::ifstream& file) : IDedObj() {
-    if (!file) {
-        std::cerr << "File is not open or its damaged\n";
+Item::Item(ByteS& bytes) : IDedObj() {
+    if (bytes.size() == 0) {
+        std::cerr << "File Empty\n";
         return;
     }
 
-    size_t g_name_size_;
-
-    double cubic_;
-    double weight_;
-    cents brute_value_;
-
-
-    file.read((char*) &g_name_size_, sizeof(size_t));
-    std::string g_name(g_name_size_, '\0');
-    file.read((char*) g_name.data(), sizeof(g_name_size_));
-
-    file.read((char*) &cubic_, sizeof(double));
-    file.read((char*) &weight_, sizeof(double));
-    file.read((char*) &brute_value_, sizeof(cents));
-
-    this->global_name = g_name;
-    this->cubic = cubic_;
-    this->weight = weight_;
-    this->brute_value = brute_value_;
+    bytes.pop<uint64_t>(this->id)
+        .pop<uint32_t>(this->group)
+        .pop(this->global_name);
+    bytes.pop<double>(this->cubic)
+        .pop<double>(this->weight)
+        .pop<cents>(this->brute_value);
 }
 
 
 
-bool Item::saveData(std::ofstream& file) {
-    if (!file) {
-        std::cerr << "File is not open or its damaged\n";
-        return false;
-    }
+ByteS Item::getBytes() {
+    ByteS buffer;
 
-    size_t g_name_size = global_name.size();
-    file.write((char*) &g_name_size, sizeof(size_t));
-    file.write(global_name.c_str(), sizeof(g_name_size));
+    buffer.append<uint64_t>(id)
+        .append<uint32_t>(group)
+        .append(global_name)
+        .append<double>(cubic)
+        .append<double>(weight)
+        .append<cents>(brute_value);
 
-    file.write((char*) &cubic, sizeof(double));
-    file.write((char*) &weight, sizeof(double));
-    file.write((char*) &brute_value, sizeof(cents));
 
-    return true;
+    return buffer;
 }
