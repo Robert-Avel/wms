@@ -61,7 +61,16 @@ ByteS& ByteS::operator<<(const ByteS& other) {
     return *this;
 }
 
+bool ByteS::resize(size_t _s) {
+    if(_s <= 0 || _s == allocated) {return false;}
 
+    if(_s > allocated) {
+        expand(allocated - _s);
+    } else {
+        collapse(_s - allocated);
+    }
+    return true;
+}
 
 ByteS& ByteS::append(char* _src, size_t __s) {
     if (_size + __s > allocated) {

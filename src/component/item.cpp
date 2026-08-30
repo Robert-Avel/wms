@@ -1,6 +1,5 @@
 #include "item.hpp"
 #include "byte_serializator.hpp"
-#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <iostream>

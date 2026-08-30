@@ -17,6 +17,8 @@ class ByteS {
 
     ByteS& operator<<(const ByteS& other);
 
+    bool resize(size_t _s);
+
     ByteS& append(char* _src, size_t __s);
     ByteS& append(std::string& __src);
 
@@ -31,6 +33,4 @@ class ByteS {
 
     unsigned char* data();
     size_t size();
-
-
 };
