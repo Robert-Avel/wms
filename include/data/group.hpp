@@ -6,16 +6,14 @@
 template <class T>
 class GroupMap {
     IDedMap<IDedMap<T>> groups;
-    std::unordered_map<std::string, uint64_t> prefixs;
 
     public:
-        GroupMap<T>();
+        GroupMap<T>() = default;
 
         IDedMap<T>* getGroup(uint64_t group_id);
-        IDedMap<T>* getGroup(std::string prefix);
 
-        bool newGroup(std::string prefix);
+        bool newGroup(uint64_t id);
+        uint64_t newGroup();
 
-        bool removeGroup(std::string prefix);
         bool removeGroup(uint64_t group_id);
 };

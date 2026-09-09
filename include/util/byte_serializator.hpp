@@ -23,13 +23,21 @@ class ByteS {
     ByteS& append(std::string& __src);
 
     template<typename T>
-    ByteS& append(T& obj);
+    ByteS& append(T& obj) {
+        append((char*) &obj, sizeof(T));
+
+        return *this;
+    }
 
     bool pop(char* __dest, size_t __s);
     bool pop(std::string& __src);
 
     template<typename T>
-    ByteS& pop(T& obj);
+    ByteS& pop(T& obj) {
+        pop((char*) &obj, sizeof(T)); 
+
+        return *this;
+    }
 
     unsigned char* data();
     size_t size();

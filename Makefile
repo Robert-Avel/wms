@@ -1,24 +1,27 @@
 CXX := g++
 INCLUDE := \
--I./include/component \
--I./include/systens \
--I./include/util \
--I./include/
+-Iinclude/component \
+-Iinclude/systens \
+-Iinclude/util \
+-Iinclude/data \
+-Iinclude/
 
 
 CFLAGS := -Wall
 
-VERSION := 0.0.0
 
 SOURCE := $(shell find src -name "*.cpp")
 
+DEPENDENCE := -lsqlite3
 
+dbuild:
+	mkdir -p build
 
-wms:
-	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms
+wms: dbuild
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) $(DEPENDENCE) main-cli.cpp -o build/robert-wms
 
-wms-debug:
-	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) main-cli.cpp -o robert-wms -DDEBUG -g
+wms-debug: dbuild
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) $(DEPENDENCE) main-cli.cpp -o build/robert-wms -DDEBUG -g
 
-test-wms:
-	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) test.cpp -o test-wms -g
+test-wms: dbuild
+	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) $(DEPENDENCE) test.cpp -o build/test-wms -g

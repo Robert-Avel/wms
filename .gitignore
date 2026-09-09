@@ -6,3 +6,4 @@ robert-wms
 test-wms
 *.bin
 *.json
+build

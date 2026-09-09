@@ -98,13 +98,6 @@ ByteS& ByteS::append(std::string& __src) {
 }
 
 
-template<typename T>
-ByteS& ByteS::append(T& obj) {
-    this->append((char*) obj, sizeof(T));
-
-    return *this;
-}
-
 
 bool ByteS::pop(std::string& __dest) {
     if(_size < sizeof(__dest)) {return false;}
@@ -135,13 +128,6 @@ bool ByteS::pop(char* __dest, size_t __s) {
     return true;
 }
 
-
-template<typename T>
-ByteS& ByteS::pop(T& obj) {
-    pop((char*) &obj, sizeof(T));
-
-    return *this;
-}
 
 unsigned char* ByteS::data() {return _data;}
 size_t ByteS::size() {return _size;}
