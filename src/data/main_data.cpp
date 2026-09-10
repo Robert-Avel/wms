@@ -14,21 +14,28 @@ WMSData::WMSData(std::string data_base): err_sql(nullptr) {
         std::cout << err_sql << "\n";
         sqlite3_free(err_sql);
     }
-    if(r != SQLITE_OK) {return;}
 }
+
+
+std::size_t WMSData::hashID(uint64_t group, uint64_t id) {
+    std::hash<std::string> hasher;
+    std::stringstream final_id;
+
+    final_id << id << "-" << group;
+    return hasher(final_id.str());
+}
+
+
 
 //static
 int WMSData::itemCallBack(void* cls, int argc, char** argv, char** argv_name) {
-    if(argc != 6) {return 1;}
+    if(argc != 7) {return 1;}
 
-    uint64_t g_id = atol(argv[1]);
+    uint64_t g_id = atol(argv[2]);
     
-    reinterpret_cast<WMSData*>(cls)->itens.newGroup(g_id);
+    reinterpret_cast<WMSData*>(cls)->itens.newGroup(g_id); //Open if not exist
     auto g = reinterpret_cast<WMSData*>(cls)->itens.getGroup(g_id);
-    g->insert(atol(argv[0]), Item(argv[2], atof(argv[3]), atof(argv[4]), atoi(argv[5]), atol(argv[0]), atol(argv[1])));
-
-    Item* i = g->getItem(atoi(argv[0]));
-    if(i == nullptr) {std::cout << "OOOOPSSS\n";} else {std::cout << i->formatData() << "\n";}
+    g->insert(atol(argv[1]), Item(argv[3], atof(argv[4]), atof(argv[5]), atoi(argv[6]), atol(argv[1]), atol(argv[2])));
 
     return 0;
 }
@@ -42,6 +49,7 @@ WMSData::~WMSData() {
 std::string WMSData::formatItemInsertion(Item& i) {
     std::stringstream buffer;
     buffer << "INSERT INTO " << ITEM_TABLE_NAME << " VALUES" << " ("
+    << hashID(i.getGroup(), i.getID()) << "," 
     << i.getID() << "," 
     << i.getGroup() << ","
     << "'" << i.getGlobalName() << "',"
@@ -77,7 +85,4 @@ bool WMSData::loadItem(uint64_t group_id, uint64_t id) {
         sqlite3_free(err_sql);
     }
     return true;
-}
-bool WMSData::deleteItem() {
-
 }

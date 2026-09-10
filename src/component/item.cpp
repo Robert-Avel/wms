@@ -1,5 +1,4 @@
 #include "item.hpp"
-#include "byte_serializator.hpp"
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
@@ -27,34 +26,4 @@ std::string Item::formatData() const {
            << "Value: " << moneyFormatSimple(brute_value) << "\n";
 
     return buffer.str();
-}
-
-Item::Item(ByteS& bytes) : IDedObj() {
-    if (bytes.size() == 0) {
-        std::cerr << "File Empty\n";
-        return;
-    }
-
-    bytes.pop<uint64_t>(this->id)
-        .pop<uint32_t>(this->group)
-        .pop(this->global_name);
-    bytes.pop<double>(this->cubic)
-        .pop<double>(this->weight)
-        .pop<cents>(this->brute_value);
-}
-
-
-
-ByteS Item::getBytes() {
-    ByteS buffer;
-
-    buffer.append<uint64_t>(id)
-        .append<uint32_t>(group)
-        .append(global_name)
-        .append<double>(cubic)
-        .append<double>(weight)
-        .append<cents>(brute_value);
-
-
-    return buffer;
 }
