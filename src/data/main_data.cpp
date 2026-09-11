@@ -37,6 +37,9 @@ int WMSData::itemCallBack(void* cls, int argc, char** argv, char** argv_name) {
     auto g = reinterpret_cast<WMSData*>(cls)->itens.getGroup(g_id);
     g->insert(atol(argv[1]), Item(argv[3], atof(argv[4]), atof(argv[5]), atoi(argv[6]), atol(argv[1]), atol(argv[2])));
 
+    for(int i = 0; i < argc; i++) {std::cout << " | " << argv[i];}
+    std::cout << " |\n";
+
     return 0;
 }
 
@@ -61,6 +64,21 @@ std::string WMSData::formatItemInsertion(Item& i) {
 }
 
 
+bool WMSData::saveItem() {
+    auto it = itens.begin();
+    while (it != itens.end())
+    {
+        auto it_in = it->second.begin();
+        while (it_in != it->second.end())
+        {
+            saveItem(it->first, it_in->first);
+            it_in++;
+        }
+        it++;
+    }
+}
+
+
 bool WMSData::saveItem(uint64_t group_id, uint64_t id) {
     IDedMap<Item>* group = itens.getGroup(group_id);
     if(group == nullptr) {return false;}
@@ -79,6 +97,17 @@ bool WMSData::saveItem(uint64_t group_id, uint64_t id) {
 bool WMSData::loadItem(uint64_t group_id, uint64_t id) {
     std::stringstream query;
     query << "SELECT * FROM " << ITEM_TABLE_NAME << " WHERE group_id == " << group_id << " AND id == " << id << ";";
+    sqlite3_exec(db, query.str().c_str(), &itemCallBack, this, &err_sql);
+    if(err_sql != nullptr) {
+        std::cout << err_sql << "\n";
+        sqlite3_free(err_sql);
+    }
+    return true;
+}
+
+bool WMSData::loadItem() {
+    std::stringstream query;
+    query << "SELECT * FROM " << ITEM_TABLE_NAME << ";";
     sqlite3_exec(db, query.str().c_str(), &itemCallBack, this, &err_sql);
     if(err_sql != nullptr) {
         std::cout << err_sql << "\n";

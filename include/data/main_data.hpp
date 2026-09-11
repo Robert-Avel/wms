@@ -44,5 +44,4 @@ class WMSData {
     bool saveVolume();
     bool loadVolume();
     bool deleteVolume();
-
 };

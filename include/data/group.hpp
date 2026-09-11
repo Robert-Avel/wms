@@ -22,6 +22,8 @@ class GroupMap {
         uint64_t append(uint64_t group_id, T& i, bool create_group = false);
         bool insert(uint64_t group_id, uint64_t id, T& i,  bool create_group = false);
 
+        typename std::unordered_map<uint64_t, IDedMap<T>>::iterator begin() {return groups.begin();}
+        typename std::unordered_map<uint64_t, IDedMap<T>>::iterator end() {return groups.end();}
 
         size_t size();
 };
