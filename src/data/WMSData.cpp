@@ -1,4 +1,4 @@
-#include "main_data.hpp"
+#include "WMSData.hpp"
 #include <exception>
 #include <sstream>
 #include <iostream>
@@ -14,6 +14,12 @@ WMSData::WMSData(std::string data_base): err_sql(nullptr) {
         std::cout << err_sql << "\n";
         sqlite3_free(err_sql);
     }
+
+    loadGroup();
+}
+
+WMSData::~WMSData() {
+    sqlite3_close(db);
 }
 
 
@@ -43,10 +49,15 @@ int WMSData::itemCallBack(void* cls, int argc, char** argv, char** argv_name) {
     return 0;
 }
 
+//static
+int WMSData::groupCallBack(void* cls, int argc, char** argv, char** argv_name) {
+    if(argc != 2) {return 1;}
 
-WMSData::~WMSData() {
-    sqlite3_close(db);
+    auto& g_names = reinterpret_cast<WMSData*>(cls)->group_translation;
+    g_names.insert({argv[1], atol(argv[0])});
+    return 0;
 }
+
 
 
 std::string WMSData::formatItemInsertion(Item& i) {
@@ -64,6 +75,32 @@ std::string WMSData::formatItemInsertion(Item& i) {
 }
 
 
+bool WMSData::saveGroup(uint64_t id, std::string name) {
+    std::stringstream query;
+    query << "INSERT INTO " << GROUP_TABLE(GROUP_TABLE_NAME)
+     << "(" << id << "," << name << ");";
+
+    sqlite3_exec(db, query.str().c_str(), nullptr, nullptr, &err_sql);
+        if(err_sql != nullptr) {
+        std::cout << err_sql << "\n";
+        sqlite3_free(err_sql);
+        return false;
+    }
+    return true;
+}
+
+bool WMSData::loadGroup() {
+    sqlite3_exec(db, "SELECT * FROM " GROUP_TABLE_NAME ";", &groupCallBack, this, &err_sql);
+        if(err_sql != nullptr) {
+        std::cout << err_sql << "\n";
+        sqlite3_free(err_sql);
+        return false;
+    }
+    return true;
+
+}
+
+
 bool WMSData::saveItem() {
     auto it = itens.begin();
     while (it != itens.end())
@@ -76,6 +113,7 @@ bool WMSData::saveItem() {
         }
         it++;
     }
+    return true;
 }
 
 
@@ -90,6 +128,7 @@ bool WMSData::saveItem(uint64_t group_id, uint64_t id) {
     if(err_sql != nullptr) {
         std::cout << err_sql << "\n";
         sqlite3_free(err_sql);
+        return false;
     }
     return true;
 }
@@ -101,6 +140,7 @@ bool WMSData::loadItem(uint64_t group_id, uint64_t id) {
     if(err_sql != nullptr) {
         std::cout << err_sql << "\n";
         sqlite3_free(err_sql);
+        return false;
     }
     return true;
 }
@@ -112,6 +152,7 @@ bool WMSData::loadItem() {
     if(err_sql != nullptr) {
         std::cout << err_sql << "\n";
         sqlite3_free(err_sql);
+        return false;
     }
     return true;
 }

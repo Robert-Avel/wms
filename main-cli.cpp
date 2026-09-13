@@ -12,8 +12,6 @@
 
 static WMRobert syst;
 
-std::string ITEM_DB = "item.bin";
-
 
 int main(int argc, char** argv) {
     if (argc <= 1) {
@@ -27,7 +25,7 @@ int main(int argc, char** argv) {
         syst.data_module.loadItem(ITEM_DB);
         //item new <name> <weight> <cubic> <value>
         if(strcmp(argv[2], CNEW) == 0 && argc == 7) {
-            bruteID i = syst.item_module.create(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
+            bruteID i = syst.item_module.(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
             std::cout << "A new item was created with the ID " << i << '\n';
         }
     }

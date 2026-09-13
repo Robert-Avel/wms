@@ -2,21 +2,27 @@
 #include "item.hpp"
 #include "volume.hpp"
 #include "group.hpp"
+#include "GroupPrefixMap.hpp"
 #include <sqlite3.h>
 #include <functional>
 
 
 #define ITEM_TABLE_NAME "items"
 #define VOLUME_TABLE_NAME "volumes"
+#define GROUP_TABLE_NAME "groups"
 
 #define ITEM_TABLE(NAME) NAME "(hash BIGINT PRIMARY KEY, id INTEGER, group_id INTEGER, global_name TEXT, cubic DOUBLE, weight DOUBLE, brute_value INTEGER)"
 #define VOLUME_TABLE(NAME) NAME "(hash BIGINT PRIMARY KEY, id INTEGER, group_id INTEGER, item_id INTEGER, volume_batch INTEGER, weight DOUBLE, volume_m3 DOUBLE, value INTEGER)"
+#define GROUP_TABLE(NAME) NAME "(id INTEGER PRIMARY KEY, name TEXT)"
 
 #define CREATE_IFNE "CREATE TABLE IF NOT EXISTS "
 
 #define TABLE_NEW(TABLE) CREATE_IFNE TABLE ";"
 
-#define TABLE_INIT TABLE_NEW(ITEM_TABLE(ITEM_TABLE_NAME)) TABLE_NEW(VOLUME_TABLE(VOLUME_TABLE_NAME))
+#define TABLE_INIT \
+TABLE_NEW(ITEM_TABLE(ITEM_TABLE_NAME)) \
+TABLE_NEW(VOLUME_TABLE(VOLUME_TABLE_NAME)) \
+TABLE_NEW(GROUP_TABLE(GROUP_TABLE_NAME))
 
 class WMSData {
     sqlite3* db;
@@ -24,15 +30,21 @@ class WMSData {
 
     std::size_t hashID(uint64_t group, uint64_t id);
     std::string formatItemInsertion(Item& i);
+
     static int itemCallBack(void*, int argc, char** argv, char** argv_name);
+    static int groupCallBack(void*, int argc, char** argv, char** argv_name);
 
     public:
     GroupMap<Volume> volumes;
     GroupMap<Item> itens;
+    GroupPrefixMap group_translation;
+
     
     WMSData(std::string data_base);
     ~WMSData();
 
+    bool saveGroup(uint64_t id, std::string name);
+    bool loadGroup();
 
     bool saveItem(uint64_t group, uint64_t id);
     bool saveItem();

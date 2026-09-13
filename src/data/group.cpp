@@ -63,6 +63,17 @@ bool GroupMap<T>::insert(uint64_t group_id, uint64_t id, T& i, bool create_group
     return g->insert(id, i);
 }
 
+
+template <class T>
+T* GroupMap<T>::getItem(uint64_t group_id, uint64_t i) {
+    IDedMap<T>* g = groups.getItem(group_id);
+    if(g == nullptr) {return nullptr;}
+
+    return g->getItem(i);
+}
+
+
+
 template <class T>
 size_t GroupMap<T>::size() {
     return this->groups.size();
