@@ -44,6 +44,7 @@ class WMSData {
     ~WMSData();
 
     bool saveGroup(uint64_t id, std::string name);
+    bool saveGroup();
     bool loadGroup();
 
     bool saveItem(uint64_t group, uint64_t id);

@@ -10,57 +10,86 @@
 #include <string.h>
 
 
-static WMRobert syst;
+static WMRobert syst("WmsDataBase.db");
+
+
+inline void groupContext(int argc, char** argv) 
+{
+    syst.data_module.loadGroup();
+    //group new <name>
+    if(strcmp(argv[2], CNEW) == 0 && argc == 4) {
+        uint64_t r = syst.group_module.newGroup(argv[3]);
+        if(r == 0) {std::cout << "A group was already created with this name (" << argv[3] << ")\n";}
+        else {std::cout << "A new group was created with ID " << r << "\n";}
+    }
+
+    //group list
+    else if(strcmp(argv[2], CLIST) == 0 && argc == 3) {
+        GroupPrefixMap& r = syst.group_module.getGroups();
+        if(r.empty()) {std::cout << "No groups\n";}
+        else {
+            auto it = r.begin();
+            while (it != r.end())
+            {
+                std::cout << it->second << " | " << it->first << "\n";
+                it++;
+            }   
+        }
+    }
+    syst.data_module.saveGroup();
+}
+
+
+
+inline void itemContext(int& argc, char**& argv) 
+{
+    syst.data_module.loadItem();
+    syst.data_module.loadGroup();
+    //item new <group> <name> <weight> <cubic> <value>
+    if(strcmp(argv[2], CNEW) == 0 && argc == 8) {
+        uint64_t r = syst.item_module.createItem(
+            argv[3],
+            argv[4],
+            std::atof(argv[5]),
+            std::atof(argv[6]),
+            std::atoi(argv[7])
+        );
+        std::cout << "A new item was created with ID" << r << "\n";
+    }
+
+    //item info <group> <id>
+    else if(strcmp(argv[2], CINFO) == 0 && argc == 5) {
+        Item* r = syst.item_module.infoItem(
+            argv[3],
+            std::atol(argv[4])
+        );
+        if(r == nullptr) {std::cout << "No item found";}
+        else {std::cout << r->formatData();}
+    }
+
+    //item list <group> <page>
+    else if(strcmp(argv[2], CLIST) == 0 && argc == 5) {
+
+    }
+
+    //item search <name>
+    else if(strcmp(argv[2], CSEARCH) == 0 && argc == 5) {
+    }
+    syst.data_module.saveItem();
+}
 
 
 int main(int argc, char** argv) {
     if (argc <= 1) {
-        std::cout << "RobertWMS\n Version 0.0.1\n All Copyright reserved\n";
+        std::cout << "RobertWMS\nVersion 0.0.1\nAll Copyright reserved\n";
         return 0;
     }
 
 
-    if(strcmp(argv[1], ITEM) == 0)
-    {
-        syst.data_module.loadItem(ITEM_DB);
-        //item new <name> <weight> <cubic> <value>
-        if(strcmp(argv[2], CNEW) == 0 && argc == 7) {
-            bruteID i = syst.item_module.(argv[3], std::atoi(argv[4]), std::atoi(argv[5]), std::atoi(argv[6]));
-            std::cout << "A new item was created with the ID " << i << '\n';
-        }
-    }
-        //item info <id>
-        if(strcmp(argv[2], CINFO) == 0 && argc == 4) {
-            Item* it = syst.item_module.info(std::atoi(argv[3]));
-            if(it == nullptr) {
-                std::cout << "No iten Found with this ID\n";
-            } else {
-                std::cout << it->formatData();
-            }
-        }
+    if(strcmp(argv[1], GROUP) == 0) {groupContext(argc, argv);}
+    if(strcmp(argv[1], ITEM) == 0) {itemContext(argc, argv);}
 
-        //item list <page>
-        if(strcmp(argv[2], CLIST) == 0 && argc == 4) {
-            auto it = syst.item_module.list(std::atoi(argv[3]));
 
-            if(it.empty()) {std::cout << "No itens\n";}
-
-            for(std::pair<bruteID, const Item *> pp: it) {
-                std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
-            }
-        }
-
-        //item search <name>
-        if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
-            auto it = syst.item_module.search(argv[3]);
-
-            if(it.empty()) {std::cout << "No itens\n";}
-
-            for(std::pair<bruteID, const Item *> pp: it) {
-                std::cout << pp.first << " | " << pp.second->getGlobalName() << "\n";
-            }
-        }
-        syst.data_module.saveItem(ITEM_DB);
     //volume new <item_id>
     //volume get <id>
     //volume search batch <batch>

@@ -3,14 +3,8 @@
 #include "WMSData.hpp"
 
 
-uint64_t ItemSys::createGroup(std::string prefix) {
-    uint64_t g_id = data_base.newGroup();
-    group_names.insert({prefix, g_id});
-    return g_id;
-}
 
 
-GroupPrefixMap ItemSys::getGroups() const {return group_names;}
 
 
 uint64_t ItemSys::createItem(std::string group, std::string name, double weight, double cubic, cents value) {
@@ -18,11 +12,10 @@ uint64_t ItemSys::createItem(std::string group, std::string name, double weight,
     if(g_id == nullptr) {return 0;}
 
     uint64_t i_id = data_base.getGroup(*g_id)->showNexID();
-
     
     Item i{name, cubic, weight, value, i_id, *g_id};
     
-    data_base.append(*g_id, i);
+    data_base.append(*g_id, i, true);
 
     return i_id;
 }

@@ -16,9 +16,6 @@ class ItemSys {
     public:
     ItemSys(WMSData& db): data_base(db.itens), group_names(db.group_translation) {}
 
-    uint64_t createGroup(std::string prefix);
-    GroupPrefixMap getGroups() const;
-
 
     uint64_t createItem(std::string group, std::string name, double weight, double cubic, cents value);
     Item* infoItem(std::string group, uint64_t id_);

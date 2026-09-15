@@ -77,8 +77,8 @@ std::string WMSData::formatItemInsertion(Item& i) {
 
 bool WMSData::saveGroup(uint64_t id, std::string name) {
     std::stringstream query;
-    query << "INSERT INTO " << GROUP_TABLE(GROUP_TABLE_NAME)
-     << "(" << id << "," << name << ");";
+    query << "INSERT INTO " << GROUP_TABLE_NAME << "(id, name) VALUES" 
+     << "(" << id << ", \"" << name << "\");";
 
     sqlite3_exec(db, query.str().c_str(), nullptr, nullptr, &err_sql);
         if(err_sql != nullptr) {
@@ -88,6 +88,20 @@ bool WMSData::saveGroup(uint64_t id, std::string name) {
     }
     return true;
 }
+
+bool WMSData::saveGroup() {
+    if(group_translation.empty()) {return false;}
+
+    auto it = group_translation.begin();
+    while (it != group_translation.end())
+    {
+        this->saveGroup(it->second, it->first);
+        it++;
+    }
+    return true;
+    
+}
+
 
 bool WMSData::loadGroup() {
     sqlite3_exec(db, "SELECT * FROM " GROUP_TABLE_NAME ";", &groupCallBack, this, &err_sql);

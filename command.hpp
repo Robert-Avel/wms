@@ -4,6 +4,7 @@
 #define BATCH "batch"
 #define CARGO "cargo"
 #define WAREHOUSE "warehouse"
+#define GROUP "group"
 #define CONFIG "config"
 
 #define CNEW "new"
