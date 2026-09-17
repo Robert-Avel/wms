@@ -8,12 +8,12 @@ void IDedObj::setID(uint64_t _id) {
 }
 
 
-uint64_t IDedObj::getID() {return id;}
+uint64_t IDedObj::getID() const {return id;}
 
 void IDedObj::setGroup(uint32_t _group) {
     this->group = _group;
 }
 
-uint32_t IDedObj::getGroup() {
+uint32_t IDedObj::getGroup() const {
     return group;
 }

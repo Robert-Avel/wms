@@ -38,7 +38,7 @@ std::list<const Item*> ItemSys::list(std::string prefix, uint32_t page) {
     for (uint64_t it_id = 1; it_id <= data_base.size(); it_id++) {
         if(page == i_page) {
             Item* i = this->data_base.getItem(*g_id, it_id);
-            output.push_back(i);
+            if(i != nullptr) {output.push_back(i);}
         }
         if(page % 10 == 0) {i_page++;}
     }

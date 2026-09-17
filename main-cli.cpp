@@ -13,14 +13,16 @@
 static WMRobert syst("WmsDataBase.db");
 
 
-inline void groupContext(int argc, char** argv) 
+inline void groupContext(int& argc, char**& argv) 
 {
-    syst.data_module.loadGroup();
     //group new <name>
     if(strcmp(argv[2], CNEW) == 0 && argc == 4) {
         uint64_t r = syst.group_module.newGroup(argv[3]);
         if(r == 0) {std::cout << "A group was already created with this name (" << argv[3] << ")\n";}
-        else {std::cout << "A new group was created with ID " << r << "\n";}
+        else {
+            std::cout << "A new group was created with ID " << r << "\n";
+            syst.data_module.saveGroup(r, argv[3]);
+        }    
     }
 
     //group list
@@ -36,15 +38,12 @@ inline void groupContext(int argc, char** argv)
             }   
         }
     }
-    syst.data_module.saveGroup();
 }
 
 
 
 inline void itemContext(int& argc, char**& argv) 
 {
-    syst.data_module.loadItem();
-    syst.data_module.loadGroup();
     //item new <group> <name> <weight> <cubic> <value>
     if(strcmp(argv[2], CNEW) == 0 && argc == 8) {
         uint64_t r = syst.item_module.createItem(
@@ -55,27 +54,55 @@ inline void itemContext(int& argc, char**& argv)
             std::atoi(argv[7])
         );
         std::cout << "A new item was created with ID" << r << "\n";
+        syst.data_module.saveItem(
+            *syst.data_module.group_translation.translateGName(argv[3]),
+            r
+        );    
     }
 
     //item info <group> <id>
     else if(strcmp(argv[2], CINFO) == 0 && argc == 5) {
+        uint64_t* i = syst.data_module.group_translation.translateGName(argv[3]); 
+        if(i != nullptr) {
+            syst.data_module.loadItem(*i, std::atol(argv[4]));
+        }
         Item* r = syst.item_module.infoItem(
             argv[3],
             std::atol(argv[4])
         );
-        if(r == nullptr) {std::cout << "No item found";}
+        if(r == nullptr) {std::cout << "No item found\n";}
         else {std::cout << r->formatData();}
     }
 
     //item list <group> <page>
     else if(strcmp(argv[2], CLIST) == 0 && argc == 5) {
+        syst.data_module.loadItem();
 
+        std::list<const Item*> r = syst.item_module.list(argv[3], atoi(argv[4]));
+        if(r.empty()) {std::cout << "No Itens Found\n"; return;}
+        auto it = r.begin();
+        while (it != r.end())
+        {
+            std::cout << (*it)->getID() << " | " << (*it)->getGlobalName() << "\n";
+            it++;
+        }
+        
     }
 
     //item search <name>
-    else if(strcmp(argv[2], CSEARCH) == 0 && argc == 5) {
+    else if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
+        syst.data_module.loadItem();
+
+        std::list<const Item*> r = syst.item_module.search(argv[3]);
+        if(r.empty()) {std::cout << "No Itens Found\n"; return;}
+
+        auto it = r.begin();
+        while (it != r.end())
+        {
+            std::cout << (*it)->getID() << " | " << (*it)->getGlobalName() << "\n";
+            it++;
+        }
     }
-    syst.data_module.saveItem();
 }
 
 
