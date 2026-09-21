@@ -10,12 +10,11 @@
 
 
 class ItemSys {
-    sqlite3*& db_link;
     GroupMap<Item>& data_base;
     GroupPrefixMap& group_names;
 
     public:
-    ItemSys(WMSData& db): data_base(db.itens), group_names(db.group_translation), db_link(db.db) {}
+    ItemSys(WMSData& db): data_base(db.itens), group_names(db.group_translation) {}
 
 
     uint64_t createItem(std::string group, std::string name, double weight, double cubic, cents value);
