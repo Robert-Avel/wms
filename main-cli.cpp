@@ -21,7 +21,7 @@ inline void groupContext(int& argc, char**& argv)
         if(r == 0) {std::cout << "A group was already created with this name (" << argv[3] << ")\n";}
         else {
             std::cout << "A new group was created with ID " << r << "\n";
-            syst.data_module.saveGroup(r, argv[3]);
+            syst.data_module.saveGroupMap(r, argv[3]);
         }    
     }
 
@@ -30,11 +30,9 @@ inline void groupContext(int& argc, char**& argv)
         GroupPrefixMap& r = syst.group_module.getGroups();
         if(r.empty()) {std::cout << "No groups\n";}
         else {
-            auto it = r.begin();
-            while (it != r.end())
+            for(auto& it: r) 
             {
-                std::cout << it->second << " | " << it->first << "\n";
-                it++;
+                std::cout << it.second << " | " << it.first << "\n";
             }   
         }
     }
@@ -77,14 +75,14 @@ inline void itemContext(int& argc, char**& argv)
     //item list <group> <page>
     else if(strcmp(argv[2], CLIST) == 0 && argc == 5) {
         syst.data_module.loadItem();
+        
 
         std::list<const Item*> r = syst.item_module.list(argv[3], atoi(argv[4]));
         if(r.empty()) {std::cout << "No Itens Found\n"; return;}
         auto it = r.begin();
-        while (it != r.end())
+        for(auto& it: r) 
         {
-            std::cout << (*it)->getID() << " | " << (*it)->getGlobalName() << "\n";
-            it++;
+            std::cout << it->getID() << " | " << it->getGlobalName() << "\n";
         }
         
     }
@@ -96,11 +94,8 @@ inline void itemContext(int& argc, char**& argv)
         std::list<const Item*> r = syst.item_module.search(argv[3]);
         if(r.empty()) {std::cout << "No Itens Found\n"; return;}
 
-        auto it = r.begin();
-        while (it != r.end())
-        {
-            std::cout << (*it)->getID() << " | " << (*it)->getGlobalName() << "\n";
-            it++;
+        for(auto& it: r) {
+            std::cout << it->getID() << " | " << it->getGlobalName() << "\n";
         }
     }
 }

@@ -6,4 +6,5 @@
 class GroupPrefixMap: public std::unordered_map<std::string, uint64_t> {
     public:
     uint64_t* translateGName(std::string name);
+    bool hasPrefix(uint64_t i) const;
 };

@@ -2,37 +2,40 @@
 
 
 uint64_t GroupSys::newGroup(std::string name) {
-    if(gpm.empty()) {
-        gpm.insert({name, 1});
+    gpm.loadGroupMap();
+    if(gpm.group_translation.translateGName(name) != nullptr) {return 0;}
+    if(gpm.group_translation.empty()) {
+        gpm.group_translation.insert({name, 1});
         return 1;
     }
 
-    if(gpm.find(name) != gpm.end()) {return 0;}
-
     uint64_t id = 0;
-    auto it = gpm.begin();
-    while (it != gpm.end())
-    {
-        if(id < it->second) {id = it->second;}
-        it++;
+    for(auto& it: gpm.group_translation) {
+        if(id < it.second) {id = it.second;}
     }
-    gpm.insert({name, ++id});
+
+    gpm.group_translation.insert({name, ++id});
+    gpm.saveGroupMap(id, name);
     return id;
 }
 
 uint64_t* GroupSys::getGroupID(std::string name) {
-    return gpm.translateGName(name);
+    return gpm.group_translation.translateGName(name);
 }
 
 GroupPrefixMap& GroupSys::getGroups() const {
-    return gpm;
+    gpm.loadGroupMap();
+    return gpm.group_translation;
 }
 
 bool GroupSys::deleteGroup(std::string name) {
-    if(gpm.empty()) {return false;}
+    gpm.loadGroupMap();
+    if(gpm.group_translation.empty()) {return false;}
 
-    auto target = gpm.find(name);
-    if(target == gpm.end()) {return false;}
-    else {gpm.erase(target);}
+    auto target = gpm.group_translation.find(name);
+    if(target == gpm.group_translation.end()) {return false;}
+    else {
+        gpm.group_translation.erase(target);
+    }
     return true;
 }
