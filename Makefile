@@ -22,5 +22,5 @@ wms: dbuild
 wms-debug: dbuild
 	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) $(DEPENDENCE) main-cli.cpp -o build/robert-wms -DDEBUG -g
 
-test-wms: dbuild
+test: dbuild
 	$(CXX) $(CFLAGS) $(INCLUDE) $(SOURCE) $(DEPENDENCE) test.cpp -o build/test-wms -g

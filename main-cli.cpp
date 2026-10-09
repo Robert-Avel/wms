@@ -35,22 +35,21 @@ static std::vector<std::string> slipStr(std::string input, char delimiter) {
 
 static WMRobert syst("SSS.db");
 
-/*
-inline void groupContext(int& argc, char**& argv)
+
+inline void groupContext(size_t argc, std::vector<std::string>& argv)
 {
     //group new <name>
-    if(strcmp(argv[2], CNEW) == 0 && argc == 4) {
-        uint64_t r = syst.group_module.newGroup(argv[3]);
+    if(argv[1] == CNEW && argc == 3) {
+        uint64_t r = syst.group_module.newGroup(argv[2]);
         if(r == 0) {std::cout << "A group was already created with this name (" << argv[3] << ")\n";}
         else {
             std::cout << "A new group was created with ID " << r << "\n";
-            syst.data_module.saveGroupMap(r, argv[3]);
         }
     }
 
     //group list
-    else if(strcmp(argv[2], CLIST) == 0 && argc == 3) {
-        GroupPrefixMap& r = syst.group_module.getGroups();
+    else if(argv[1] == CLIST && argc == 2) {
+        auto& r = syst.group_module.getMap();
         if(r.empty()) {std::cout << "No groups\n";}
         else {
             for(auto& it: r)
@@ -61,7 +60,7 @@ inline void groupContext(int& argc, char**& argv)
     }
 }
 
- */
+
 
 inline void itemContext(size_t argc, std::vector<std::string>& argv)
 {
@@ -114,9 +113,9 @@ int main() {
 
         if(argv_[0] == "quit") {break;}
         if(argv_[0] == ITEM) {itemContext(argv_.size(), argv_);}
+        if(argv_[0] == GROUP) {groupContext(argv_.size(), argv_);}
     }
 
-    //if(strcmp(argv[1], GROUP) == 0) {groupContext(argc, argv);}
 
 
     //volume new <item_id>

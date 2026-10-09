@@ -37,6 +37,7 @@ class IdGroup {
         auto end() { return groups.end(); }
 
         size_t size();
+        size_t sizeMap() {return groups.size();}
         bool isEmpty() {return groups.isEmpty();}
         void updateID();
 };

@@ -7,7 +7,7 @@
 #include <optional>
 
 
-bool ItemDataBase::saveFile(IdObj<Item> obj, std::ofstream& file) {
+bool ItemDB::saveFile(IdObj<Item> obj, std::ofstream& file) {
     if(!file) {
         std::cerr << "File not open!\n";
         return false;
@@ -28,7 +28,7 @@ bool ItemDataBase::saveFile(IdObj<Item> obj, std::ofstream& file) {
     return true;
 }
 
-std::optional<IdObj<Item>> ItemDataBase::loadFile(std::ifstream& file) {
+std::optional<IdObj<Item>> ItemDB::loadFile(std::ifstream& file) {
     std::optional<IdObj<Item>> i;
     if(!file) {
         std::cerr << "File not open!\n";
@@ -58,7 +58,7 @@ std::optional<IdObj<Item>> ItemDataBase::loadFile(std::ifstream& file) {
     return i;
 }
 
-void ItemDataBase::saveAllFile(std::ofstream& file) {
+void ItemDB::saveAllFile(std::ofstream& file) {
     for(auto& g: data) {
         for(auto& obj: g.second) {
             saveFile(obj.second, file);
@@ -66,7 +66,7 @@ void ItemDataBase::saveAllFile(std::ofstream& file) {
     }
 }
 
-bool ItemDataBase::loadAllFile(std::ifstream& file, size_t d_size) {
+bool ItemDB::loadAllFile(std::ifstream& file, size_t d_size) {
     for(size_t i = 0; i < d_size; i++) {
         auto l_obj = loadFile(file);
         if(l_obj.has_value()) {
