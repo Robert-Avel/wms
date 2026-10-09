@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASE_CONVERTER_HPP
+#define BASE_CONVERTER_HPP
 
 #include <cstdint>
 #include <string>
@@ -24,3 +25,5 @@ namespace basec
     uint64_t baseToInt(std::string code, StdMode mode_);
 
 }
+
+#endif

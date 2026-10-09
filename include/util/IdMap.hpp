@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ID_MAP_HPP
+#define ID_MAP_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -6,15 +7,16 @@
 
 
 template <class T>
-class IDedMap {
+class IdMap
+{
     std::unordered_map<uint64_t, T> data;
     uint64_t next_id;
 
     uint64_t getNewID();
 
     public:
-    IDedMap<T>(): next_id(1) {};
-    IDedMap<T>(uint64_t next_id_): next_id(next_id_) {};
+    IdMap<T>(): next_id(1) {};
+    IdMap<T>(uint64_t next_id_): next_id(next_id_) {};
 
     uint64_t append(const T& i);
 
@@ -36,4 +38,9 @@ class IDedMap {
     typename std::unordered_map<uint64_t, T>::iterator end();
 
     bool isEmpty() const;
+    void uptadeLastID();
 };
+
+#include "src/util/IdMap.tpp"
+
+#endif

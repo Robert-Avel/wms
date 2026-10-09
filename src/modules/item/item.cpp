@@ -1,4 +1,4 @@
-#include "item.hpp"
+#include "item/item.hpp"
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
@@ -14,16 +14,16 @@ const std::string& Item::getGlobalName() const {
     return this->global_name;
 }
 
-double Item::getCubic() const {return this->cubic;}
-double Item::getWeight() const {return this->weight;}
-cents Item::getBruteValue() const {return this->brute_value;}
+const uint32_t& Item::getCubic() const {return this->cubic_cm;}
+const uint32_t& Item::getWeight() const {return this->weight_g;}
+const cents& Item::getBruteValue() const {return this->value;}
 
 std::string Item::formatData() const {
     std::ostringstream buffer;
     buffer << "G_Name: " << global_name << "\n"
-           << "M3: " << cubic << "\n"
-           << "Weight: " << weight << "\n"
-           << "Value: " << moneyFormatSimple(brute_value) << "\n";
+           << "M3: " << cubic_cm << "\n"
+           << "Weight: " << weight_g << "\n"
+           << "Value: " << moneyFormatSimple(value) << "\n";
 
     return buffer.str();
 }

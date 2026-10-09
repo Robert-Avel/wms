@@ -1,19 +1,42 @@
-#include "IDed_map.hpp"
 #include "base_converter.hpp"
 #include "command.hpp"
-#include "item.hpp"
+#include "item/item.hpp"
 #include "interface.hpp"
 #include <cmath>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string.h>
+#include <getopt.h>
+#include <string>
+#include <vector>
 
 
-static WMRobert syst("WmsDataBase.db");
+
+static std::vector<std::string> slipStr(std::string input, char delimiter) {
+    std::vector<std::string> output;
+    std::string buffer;
+    bool in_quotes = false;
+    for(auto& ch: input) {
+        if(ch == delimiter && !in_quotes) {
+            output.push_back(buffer);
+            buffer.clear();
+        }
+        else {
+            buffer.append(1, ch);
+            if(ch == '"') {in_quotes = !in_quotes;}
+        }
+    }
+    output.push_back(buffer);
+    return output;
+}
 
 
-inline void groupContext(int& argc, char**& argv) 
+static WMRobert syst("SSS.db");
+
+/*
+inline void groupContext(int& argc, char**& argv)
 {
     //group new <name>
     if(strcmp(argv[2], CNEW) == 0 && argc == 4) {
@@ -22,7 +45,7 @@ inline void groupContext(int& argc, char**& argv)
         else {
             std::cout << "A new group was created with ID " << r << "\n";
             syst.data_module.saveGroupMap(r, argv[3]);
-        }    
+        }
     }
 
     //group list
@@ -30,86 +53,70 @@ inline void groupContext(int& argc, char**& argv)
         GroupPrefixMap& r = syst.group_module.getGroups();
         if(r.empty()) {std::cout << "No groups\n";}
         else {
-            for(auto& it: r) 
+            for(auto& it: r)
             {
                 std::cout << it.second << " | " << it.first << "\n";
-            }   
+            }
         }
     }
 }
 
+ */
 
-
-inline void itemContext(int& argc, char**& argv) 
+inline void itemContext(size_t argc, std::vector<std::string>& argv)
 {
     //item new <group> <name> <weight> <cubic> <value>
-    if(strcmp(argv[2], CNEW) == 0 && argc == 8) {
-        uint64_t r = syst.item_module.createItem(
+    if(argv[1] == CNEW && argc == 7) {
+        uint64_t r = syst.item_module.creteItem(
+            atol(argv[2].c_str()),
             argv[3],
-            argv[4],
-            std::atof(argv[5]),
-            std::atof(argv[6]),
-            std::atoi(argv[7])
+            std::atoi(argv[4].c_str()),
+            std::atoi(argv[5].c_str()),
+            std::atoi(argv[6].c_str())
         );
-        std::cout << "A new item was created with ID" << r << "\n";
-        syst.data_module.saveItem(
-            *syst.data_module.group_translation.translateGName(argv[3]),
-            r
-        );    
+        std::cout << "A new item was created with ID " << r << "\n";
     }
 
     //item info <group> <id>
-    else if(strcmp(argv[2], CINFO) == 0 && argc == 5) {
-        uint64_t* i = syst.data_module.group_translation.translateGName(argv[3]); 
-        if(i != nullptr) {
-            syst.data_module.loadItem(*i, std::atol(argv[4]));
-        }
-        Item* r = syst.item_module.infoItem(
-            argv[3],
-            std::atol(argv[4])
+    else if(argv[1] == CINFO && argc == 4) {
+        const auto* r = syst.item_module.getItem(
+            std::atol(argv[2].c_str()),
+            std::atol(argv[3].c_str())
         );
         if(r == nullptr) {std::cout << "No item found\n";}
-        else {std::cout << r->formatData();}
+        else {std::cout << r->cgetObj().formatData();}
     }
 
     //item list <group> <page>
-    else if(strcmp(argv[2], CLIST) == 0 && argc == 5) {
-        syst.data_module.loadItem();
-        
-
-        std::list<const Item*> r = syst.item_module.list(argv[3], atoi(argv[4]));
+    else if(argv[1] == CLIST && argc == 4) {
+        auto r = syst.item_module.list(atol(argv[2].c_str()), atoi(argv[3].c_str()));
         if(r.empty()) {std::cout << "No Itens Found\n"; return;}
-        auto it = r.begin();
-        for(auto& it: r) 
-        {
-            std::cout << it->getID() << " | " << it->getGlobalName() << "\n";
+        for(auto& it: r) {
+            std::cout << it->getID() << " | " << it->cgetObj().getGlobalName() << "\n";
         }
-        
+
     }
 
     //item search <name>
-    else if(strcmp(argv[2], CSEARCH) == 0 && argc == 4) {
-        syst.data_module.loadItem();
 
-        std::list<const Item*> r = syst.item_module.search(argv[3]);
-        if(r.empty()) {std::cout << "No Itens Found\n"; return;}
-
-        for(auto& it: r) {
-            std::cout << it->getID() << " | " << it->getGlobalName() << "\n";
-        }
-    }
 }
 
 
-int main(int argc, char** argv) {
-    if (argc <= 1) {
-        std::cout << "RobertWMS\nVersion 0.0.1\nAll Copyright reserved\n";
-        return 0;
+int main() {
+    std::cout << "RobertWMS\nVersion 0.0.1\nAll Copyright reserved\n";
+
+    while (true) {
+        std::cout << "(robert-wms) ";
+        std::string input;
+        std::getline(std::cin, input);
+
+        std::vector<std::string> argv_ = slipStr(input, ' ');
+
+        if(argv_[0] == "quit") {break;}
+        if(argv_[0] == ITEM) {itemContext(argv_.size(), argv_);}
     }
 
-
-    if(strcmp(argv[1], GROUP) == 0) {groupContext(argc, argv);}
-    if(strcmp(argv[1], ITEM) == 0) {itemContext(argc, argv);}
+    //if(strcmp(argv[1], GROUP) == 0) {groupContext(argc, argv);}
 
 
     //volume new <item_id>

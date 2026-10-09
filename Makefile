@@ -1,10 +1,9 @@
 CXX := g++
 INCLUDE := \
--Iinclude/component \
--Iinclude/systens \
 -Iinclude/util \
--Iinclude/data \
--Iinclude/
+-Iinclude/modules \
+-Iinclude/ \
+-I./
 
 
 CFLAGS := -Wall
