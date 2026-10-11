@@ -8,7 +8,6 @@
 using StrMap = std::unordered_map<std::string, uint64_t>;
 
 class GroupMngr {
-
     StrMap& g_map;
 
     public:
@@ -18,6 +17,7 @@ class GroupMngr {
 
         uint64_t newGroup(std::string name);
         bool eraseGroup(std::string name);
+        uint64_t getGroupID(std::string name);
 
         template<class T>
         void syncGroup(IdGroup<T>& group) {

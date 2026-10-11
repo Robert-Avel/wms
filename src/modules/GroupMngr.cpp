@@ -23,3 +23,8 @@ bool GroupMngr::eraseGroup(std::string name) {
     g_map.erase(target);
     return true;
 }
+
+uint64_t GroupMngr::getGroupID(std::string name) {
+    if(g_map.find(name) == g_map.end()) {return 0;}
+    return g_map.at(name);
+}

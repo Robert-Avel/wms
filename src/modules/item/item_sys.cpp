@@ -7,9 +7,18 @@ const IdObj<Item>* ItemManager::getItem(uint64_t group, uint64_t id) {
     return linked_data.getItem(group, id);
 }
 
+const IdObj<Item>* ItemManager::getItem(std::string group, uint64_t id) {
+    return this->getItem(group_sys.getGroupID(group), id);
+}
+
+
 uint64_t ItemManager::creteItem(uint64_t group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, cents value) {
     Item i{global_name, cubic_cm, weight_g, value};
     return linked_data.append(group, i, true);
+}
+
+uint64_t ItemManager::creteItem(std::string group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, cents value) {
+    return this->creteItem(group_sys.getGroupID(group), global_name, cubic_cm, weight_g, value);
 }
 
 
@@ -28,4 +37,9 @@ std::list<const IdObj<Item>*> ItemManager::list(uint64_t group, uint32_t page) {
         if(page % 10 == 0) {i_page++;}
     }
     return output;
+}
+
+
+std::list<const IdObj<Item>*> ItemManager::list(std::string group, uint32_t page) {
+    return this->list(group_sys.getGroupID(group), page);
 }

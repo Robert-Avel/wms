@@ -46,6 +46,7 @@ uint64_t IdMap<T>::append(const T& i) {
 
 template <class T>
 bool IdMap<T>::insert(uint64_t id, const T& i) {
+    if(id <= 0) {return false;}
     if(data.find(id) != data.end()) {return false;}
 
     data.insert({id, i});

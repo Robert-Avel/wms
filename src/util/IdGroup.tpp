@@ -51,8 +51,9 @@ uint64_t IdGroup<T>::append(uint64_t group_id, T& i, bool create_group) {
         g = createGroupIfNotExist(group_id);
     } else {
         g = groups.getItem(group_id);
-        if(g == nullptr) {return 0;}
     }
+    if(g == nullptr) {return 0;}
+
     uint64_t obj_id = g->showNexID();
     IdObj<T> n_obj{i, obj_id, group_id};
     return g->append(n_obj);

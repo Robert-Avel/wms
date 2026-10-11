@@ -1,4 +1,3 @@
-#include "base_converter.hpp"
 #include "command.hpp"
 #include "item/item.hpp"
 #include "interface.hpp"
@@ -24,7 +23,9 @@ static std::vector<std::string> slipStr(std::string input, char delimiter) {
             buffer.clear();
         }
         else {
-            buffer.append(1, ch);
+            if(ch != '"') {
+                buffer.append(1, ch);
+            }
             if(ch == '"') {in_quotes = !in_quotes;}
         }
     }
@@ -67,19 +68,21 @@ inline void itemContext(size_t argc, std::vector<std::string>& argv)
     //item new <group> <name> <weight> <cubic> <value>
     if(argv[1] == CNEW && argc == 7) {
         uint64_t r = syst.item_module.creteItem(
-            atol(argv[2].c_str()),
+            argv[2],
             argv[3],
             std::atoi(argv[4].c_str()),
             std::atoi(argv[5].c_str()),
             std::atoi(argv[6].c_str())
         );
-        std::cout << "A new item was created with ID " << r << "\n";
+        if(r != 0) {
+            std::cout << "A new item was created with ID " << r << "\n";
+        } else std::cout << "Invalid Group or something went wrong!\n";
     }
 
     //item info <group> <id>
     else if(argv[1] == CINFO && argc == 4) {
         const auto* r = syst.item_module.getItem(
-            std::atol(argv[2].c_str()),
+            argv[2],
             std::atol(argv[3].c_str())
         );
         if(r == nullptr) {std::cout << "No item found\n";}
@@ -88,7 +91,7 @@ inline void itemContext(size_t argc, std::vector<std::string>& argv)
 
     //item list <group> <page>
     else if(argv[1] == CLIST && argc == 4) {
-        auto r = syst.item_module.list(atol(argv[2].c_str()), atoi(argv[3].c_str()));
+        auto r = syst.item_module.list(argv[2], atoi(argv[3].c_str()));
         if(r.empty()) {std::cout << "No Itens Found\n"; return;}
         for(auto& it: r) {
             std::cout << it->getID() << " | " << it->cgetObj().getGlobalName() << "\n";
