@@ -7,8 +7,8 @@
 #endif
 
 template <class T>
-Group<T>* IdGroup<T>::createGroupIfNotExist(uint64_t group_id) {
-    Group<T>* g = groups.getItem(group_id);
+_Group<T>* IdGroup<T>::createGroupIfNotExist(uint64_t group_id) {
+    _Group<T>* g = groups.getItem(group_id);
     if(g == nullptr) {
         this->newGroup(group_id);
         g = groups.getItem(group_id);
@@ -18,21 +18,21 @@ Group<T>* IdGroup<T>::createGroupIfNotExist(uint64_t group_id) {
 
 
 template <class T>
-Group<T>* IdGroup<T>::getGroup(uint64_t group_id) {
+_Group<T>* IdGroup<T>::getGroup(uint64_t group_id) {
     return groups.getItem(group_id);
 }
 
 
 template <class T>
 uint64_t IdGroup<T>::newGroup() {
-    Group<T> new_group;
+    _Group<T> new_group;
     uint64_t g_id = groups.append(new_group);
     return g_id;
 }
 
 template <class T>
 bool IdGroup<T>::newGroup(uint64_t id) {
-    Group<T> new_group;
+    _Group<T> new_group;
     return groups.insert(id, new_group);
 }
 
@@ -46,7 +46,7 @@ bool IdGroup<T>::removeGroup(uint64_t group_id) {
 
 template <class T>
 uint64_t IdGroup<T>::append(uint64_t group_id, T& i, bool create_group) {
-    Group<T>* g;
+    _Group<T>* g;
     if(create_group) {
         g = createGroupIfNotExist(group_id);
     } else {
@@ -61,7 +61,7 @@ uint64_t IdGroup<T>::append(uint64_t group_id, T& i, bool create_group) {
 
 template <class T>
 bool IdGroup<T>::insert(uint64_t group_id, uint64_t id, T& i, bool create_group) {
-    Group<T>* g;
+    _Group<T>* g;
     if(create_group) {
         g = createGroupIfNotExist(group_id);
     } else {
@@ -75,7 +75,7 @@ bool IdGroup<T>::insert(uint64_t group_id, uint64_t id, T& i, bool create_group)
 
 template <class T>
 IdObj<T>* IdGroup<T>::getItem(uint64_t group_id, uint64_t id) {
-    Group<T>* g = groups.getItem(group_id);
+    _Group<T>* g = groups.getItem(group_id);
     if(g == nullptr) {return nullptr;}
 
     return g->getItem(id);

@@ -99,9 +99,43 @@ inline void itemContext(size_t argc, std::vector<std::string>& argv)
 
     }
 
-    //item search <name>
-
 }
+
+inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
+    //volume new <group> <item_id>
+    if(argv[1] == CNEW && argc == 4) {
+        auto r = syst.volume_module.createVolume(
+            std::atol(argv[2].c_str()),
+            std::atol(argv[3].c_str())
+        );
+        if(r != 0) {
+            std::cout << "A new volume was created with ID " << r << "\n";
+        } else std::cout << "Invalid Group or something went wrong!\n";
+    }
+
+    //volume info <group> <id>
+    if(argv[1] == CINFO && argc == 4) {
+        auto* r = syst.volume_module.getVolume(
+            std::atol(argv[2].c_str()),
+            std::atol(argv[3].c_str())
+        );
+        if(r == nullptr) {std::cout << "No Volume found\n";}
+        else {std::cout << r->cgetObj().formatData();}
+    }
+
+    //volume list <group> <page>
+    if(argv[1] == CLIST && argc == 4) {
+        auto r = syst.volume_module.list(
+            std::atol(argv[2].c_str()),
+            std::atol(argv[3].c_str())
+        );
+        if(r.empty()) {std::cout << "No Volume Found\n";}
+        for(auto& it: r) {
+            std::cout << it->getID() << " | " << it->cgetObj().getBatchID() << "\n";
+        }
+    }
+}
+
 
 
 int main() {
@@ -117,15 +151,14 @@ int main() {
         if(argv_[0] == "quit") {break;}
         if(argv_[0] == ITEM) {itemContext(argv_.size(), argv_);}
         if(argv_[0] == GROUP) {groupContext(argv_.size(), argv_);}
+        if(argv_[0] == VOLUME) {volumeContext(argv_.size(), argv_);}
     }
 
 
+    //item search <name>
 
-    //volume new <item_id>
-    //volume get <id>
     //volume search batch <batch>
     //volume search item <item_id>
-    //volume list <page>
 
     //batch list <page>
     //batch new <item_id>...

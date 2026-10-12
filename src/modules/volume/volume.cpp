@@ -1,27 +1,28 @@
 #include "volume/volume.hpp"
-#include "types.hpp"
 #include <cstring>
 #include <cstring>
 #include <iostream>
 #include <sstream>
 
 
+const time_t& Volume::getCreatedIn() const {return this->created_in;}
 
-const bruteID& Volume::getItemID() const {
+
+const uint64_t& Volume::getItemID() const {
     return this->item_id;
 }
 
 
-const bruteID& Volume::getBatchID() const {
+const uint64_t& Volume::getBatchID() const {
     return this->volume_batch;
 }
 
 
-double Volume::getWeight() const {return this->weight;}
+const uint32_t& Volume::getWeight() const {return this->weight_g;}
 
-double Volume::getCubic() const {return this->volume_m3;}
+const uint32_t& Volume::getCubic() const {return this->cubic_cm;}
 
-cents Volume::getValue() const {return this->value;}
+const cents& Volume::getValue() const {return this->value;}
 
 
 std::string Volume::formatData() const {
@@ -29,8 +30,9 @@ std::string Volume::formatData() const {
     buffer
         << "Item: " << item_id << '\n'
         << "Batch: " << volume_batch << '\n'
-        << "Weight: " << weight << '\n'
-        << "m3: " << volume_m3 << '\n'
+        << "Created in: " << created_in << '\n'
+        << "Weight: " << weight_g << '\n'
+        << "cm3: " << cubic_cm << '\n'
         << "Value: " << value << '\n';
 
     return buffer.str();

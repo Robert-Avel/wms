@@ -11,6 +11,7 @@
 #include <string>
 #include "data/GroupDB.hpp"
 #include "data/ItemDB.hpp"
+#include "data/VolumeDB.hpp"
 
 
 class DataFileMnger {
@@ -30,6 +31,13 @@ class DataFileMnger {
         groups.loadAllFile(open_db, gsize);
     }
 
+    void VolumeLoad(std::ifstream& open_db) {
+        size_t gsize;
+        open_db.read((char*) &gsize, sizeof(size_t));
+        volumes.loadAllFile(open_db, gsize);
+    }
+
+
     void ItemSave(std::ofstream& open_db) {
         if(itens.data.isEmpty()) {return;}
 
@@ -44,9 +52,16 @@ class DataFileMnger {
         groups.saveAllFile(open_db);
     }
 
+    void VolumeSave(std::ofstream& open_db) {
+        size_t gsize = volumes.data.size();
+        open_db.write((char*) &gsize, sizeof(size_t));
+        volumes.saveAllFile(open_db);
+    }
+
     public:
     ItemDB itens;
     GroupDB groups;
+    VolumeDB volumes;
 
     DataFileMnger(std::string file): file_name(file) {
         std::ifstream open_db(file, std::ios::binary);
@@ -54,6 +69,7 @@ class DataFileMnger {
 
         ItemLoad(open_db);
         GroupLoad(open_db);
+        VolumeLoad(open_db);
         open_db.close();
     }
 
@@ -62,6 +78,7 @@ class DataFileMnger {
 
         ItemSave(open_db);
         GroupSave(open_db);
+        VolumeSave(open_db);
         open_db.close();
     }
 };
