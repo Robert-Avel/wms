@@ -139,7 +139,7 @@ inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
 
 
 int main() {
-    std::cout << "RobertWMS\nVersion 0.0.1\nAll Copyright reserved\n";
+    std::cout << "RobertWMS\nVersion 0.0.2\nAll Copyright reserved\n";
 
     while (true) {
         std::cout << "(robert-wms) ";
