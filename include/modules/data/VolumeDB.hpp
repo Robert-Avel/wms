@@ -1,9 +1,9 @@
-#ifndef VOLUME_DATA_BASE_HPP
-#define VOLUME_DATA_BASE_HPP
+#ifndef VOLUME_DB_HPP
+#define VOLUME_DB_HPP
 
 #include "IdGroup.hpp"
 #include "IdObj.hpp"
-#include "volume/volume.hpp"
+#include "volume/Volume.hpp"
 #include <fstream>
 #include <optional>
 

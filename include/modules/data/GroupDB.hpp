@@ -1,5 +1,5 @@
-#ifndef GROUP_DATA_BASE_HPP
-#define GROUP_DATA_BASE_HPP
+#ifndef GROUP_DB_HPP
+#define GROUP_DB_HPP
 
 #include "GroupMngr.hpp"
 #include <fstream>

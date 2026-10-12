@@ -1,5 +1,5 @@
 #include "data/VolumeDB.hpp"
-#include "volume/volume.hpp"
+#include "volume/Volume.hpp"
 #include <iostream>
 
 bool VolumeDB::saveFile(IdObj<Volume> obj, std::ofstream& file) {

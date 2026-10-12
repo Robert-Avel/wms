@@ -1,7 +1,7 @@
-#include "volume/volume_sys.hpp"
+#include "volume/VolumeManager.hpp"
 #include "IdObj.hpp"
-#include "item/item.hpp"
-#include "volume/volume.hpp"
+#include "item/Item.hpp"
+#include "volume/Volume.hpp"
 
 
 uint64_t VolumeManager::createVolume(uint64_t group, uint64_t item_id_) {

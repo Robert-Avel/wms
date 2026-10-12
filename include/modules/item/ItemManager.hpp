@@ -1,8 +1,11 @@
+#ifndef ITEM_MANAGER_HPP
+#define ITEM_MANAGER_HPP
+
 //Modulo de gerenciamento de Itens
 #include "GroupMngr.hpp"
 #include "IdGroup.hpp"
 #include "IdObj.hpp"
-#include "item/item.hpp"
+#include "item/Item.hpp"
 #include <cstdint>
 #include <string>
 #include <list>
@@ -27,3 +30,5 @@ class ItemManager  {
         std::list<const IdObj<Item>*> list(uint64_t group, uint32_t page);
         std::list<const IdObj<Item>*> list(std::string group, uint32_t page);
 };
+
+#endif

@@ -1,7 +1,6 @@
 #ifndef DATA_MANAGER_HPP
 #define DATA_MANAGER_HPP
 
-#include "IdGroup.hpp"
 #include <cstddef>
 #include <cstdio>
 #include <fstream>
@@ -14,7 +13,7 @@
 #include "data/VolumeDB.hpp"
 
 
-class DataFileMnger {
+class DataMnger {
     std::string file_name;
 
     void ItemLoad(std::ifstream& open_db) {
@@ -63,7 +62,7 @@ class DataFileMnger {
     GroupDB groups;
     VolumeDB volumes;
 
-    DataFileMnger(std::string file): file_name(file) {
+    DataMnger(std::string file): file_name(file) {
         std::ifstream open_db(file, std::ios::binary);
         if(!open_db) {return;}
 
@@ -73,7 +72,7 @@ class DataFileMnger {
         open_db.close();
     }
 
-    ~DataFileMnger() {
+    ~DataMnger() {
         std::ofstream open_db(file_name, std::ios::binary | std::ios::trunc);
 
         ItemSave(open_db);

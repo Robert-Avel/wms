@@ -1,6 +1,6 @@
 #include "data/ItemDB.hpp"
 #include "IdObj.hpp"
-#include "item/item.hpp"
+#include "item/Item.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <iostream>

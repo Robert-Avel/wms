@@ -1,6 +1,5 @@
-#include "command.hpp"
-#include "item/item.hpp"
-#include "interface.hpp"
+#include "item/Item.hpp"
+#include "WMRobert.hpp"
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
@@ -11,6 +10,19 @@
 #include <string>
 #include <vector>
 
+
+#define ITEM "item"
+#define VOLUME "volume"
+#define BATCH "batch"
+#define CARGO "cargo"
+#define WAREHOUSE "warehouse"
+#define GROUP "group"
+#define CONFIG "config"
+
+#define CNEW "new"
+#define CINFO "info"
+#define CLIST "list"
+#define CSEARCH "search"
 
 
 static std::vector<std::string> slipStr(std::string input, char delimiter) {

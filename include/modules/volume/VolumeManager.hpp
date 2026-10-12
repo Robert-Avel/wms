@@ -4,8 +4,8 @@
 #include "GroupMngr.hpp"
 #include "IdGroup.hpp"
 #include "IdObj.hpp"
-#include "item/item.hpp"
-#include "volume/volume.hpp"
+#include "item/Item.hpp"
+#include "volume/Volume.hpp"
 #include <cstdint>
 #include <list>
 

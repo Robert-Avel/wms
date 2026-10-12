@@ -1,9 +1,9 @@
-#ifndef ITEM_DATA_BASE_HPP
-#define ITEM_DATA_BASE_HPP
+#ifndef ITEM_DB_HPP
+#define ITEM_DB_HPP
 
 #include "IdGroup.hpp"
 #include "IdObj.hpp"
-#include "item/item.hpp"
+#include "item/Item.hpp"
 #include <fstream>
 #include <optional>
 

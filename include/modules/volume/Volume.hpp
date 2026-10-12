@@ -1,5 +1,7 @@
-#pragma once
-#include "item/item.hpp"
+#ifndef VOLUME_HPP
+#define VOLUME_HPP
+
+#include "item/Item.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <ctime>
@@ -40,3 +42,5 @@ class Volume {
     std::string formatData() const;
 
 };
+
+#endif

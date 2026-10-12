@@ -1,8 +1,8 @@
 #pragma once
 #include "GroupMngr.hpp"
 #include "data/DataMngr.hpp"
-#include "item/item_sys.hpp"
-#include "volume/volume_sys.hpp"
+#include "item/ItemManager.hpp"
+#include "volume/VolumeManager.hpp"
 
 
 static IdGroup<Volume> placeholder_data;
@@ -19,7 +19,7 @@ class WMRobert {
             {}
 
 
-        DataFileMnger data_module;
+        DataMnger data_module;
         GroupMngr group_module;
         ItemManager item_module;
         VolumeManager volume_module;

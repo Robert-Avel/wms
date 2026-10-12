@@ -1,3 +1,6 @@
+#ifndef ITEM_HPP
+#define ITEM_HPP
+
 #pragma once
 
 #include <cstdint>
@@ -29,3 +32,5 @@ class Item {
     std::string formatData() const;
 
 };
+
+#endif
