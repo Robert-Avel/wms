@@ -22,7 +22,7 @@ const uint32_t& Volume::getWeight() const {return this->weight_g;}
 
 const uint32_t& Volume::getCubic() const {return this->cubic_cm;}
 
-const cents& Volume::getValue() const {return this->value;}
+const Cents& Volume::getValue() const {return this->value;}
 
 
 std::string Volume::formatData() const {

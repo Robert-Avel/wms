@@ -23,7 +23,7 @@ bool ItemDB::saveFile(IdObj<Item> obj, std::ofstream& file) {
 
     file.write((char*) &i.getCubic(), sizeof(uint32_t));
     file.write((char*) &i.getWeight(), sizeof(uint32_t));
-    file.write((char*) &i.getBruteValue(), sizeof(cents));
+    file.write((char*) &i.getBruteValue(), sizeof(Cents));
 
     return true;
 }
@@ -41,7 +41,7 @@ std::optional<IdObj<Item>> ItemDB::loadFile(std::ifstream& file) {
 
     uint32_t cubic{0};
     uint32_t weight{0};
-    cents value{0};
+    Cents value{0};
 
     file.read((char*) &_group, sizeof(uint64_t));
     file.read((char*) &_id, sizeof(uint64_t));

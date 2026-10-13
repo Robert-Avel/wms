@@ -9,7 +9,8 @@
 #include <getopt.h>
 #include <string>
 #include <vector>
-
+#include "util.hpp"
+#include "UniqueCode.hpp"
 
 #define ITEM "item"
 #define VOLUME "volume"
@@ -23,27 +24,6 @@
 #define CINFO "info"
 #define CLIST "list"
 #define CSEARCH "search"
-
-
-static std::vector<std::string> slipStr(std::string input, char delimiter) {
-    std::vector<std::string> output;
-    std::string buffer;
-    bool in_quotes = false;
-    for(auto& ch: input) {
-        if(ch == delimiter && !in_quotes) {
-            output.push_back(buffer);
-            buffer.clear();
-        }
-        else {
-            if(ch != '"') {
-                buffer.append(1, ch);
-            }
-            if(ch == '"') {in_quotes = !in_quotes;}
-        }
-    }
-    output.push_back(buffer);
-    return output;
-}
 
 
 static WMRobert syst("SSS.db");
@@ -91,6 +71,18 @@ inline void itemContext(size_t argc, std::vector<std::string>& argv)
         } else std::cout << "Invalid Group or something went wrong!\n";
     }
 
+    //item info <code>
+    else if(argv[1] == CINFO && argc == 3) {
+        auto c = UniC::strToPair(argv[2]);
+        const auto* r = syst.item_module.getItem(
+            c.first,
+            c.second
+        );
+        if(r == nullptr) {std::cout << "No item found\n";}
+        else {std::cout << r->cgetObj().formatData();}
+    }
+
+
     //item info <group> <id>
     else if(argv[1] == CINFO && argc == 4) {
         const auto* r = syst.item_module.getItem(
@@ -125,8 +117,18 @@ inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
         } else std::cout << "Invalid Group or something went wrong!\n";
     }
 
+    //volume info <code>
+    else if(argv[1] == CINFO && argc == 3) {
+        auto c = UniC::strToPair(argv[2]);
+        auto* r = syst.volume_module.getVolume(
+            c.first,
+            c.second
+        );
+        if(r == nullptr) {std::cout << "No Volume found\n";}
+        else {std::cout << r->cgetObj().formatData();}
+    }
     //volume info <group> <id>
-    if(argv[1] == CINFO && argc == 4) {
+    else if(argv[1] == CINFO && argc == 4) {
         auto* r = syst.volume_module.getVolume(
             std::atol(argv[2].c_str()),
             std::atol(argv[3].c_str())
@@ -136,7 +138,7 @@ inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
     }
 
     //volume list <group> <page>
-    if(argv[1] == CLIST && argc == 4) {
+    else if(argv[1] == CLIST && argc == 4) {
         auto r = syst.volume_module.list(
             std::atol(argv[2].c_str()),
             std::atol(argv[3].c_str())
@@ -151,14 +153,14 @@ inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
 
 
 int main() {
-    std::cout << "RobertWMS\nVersion 0.0.2\nAll Copyright reserved\n";
+    std::cout << "RobertWMS\nVersion 0.0.3\nAll Copyright reserved\n";
 
     while (true) {
         std::cout << "(robert-wms) ";
         std::string input;
         std::getline(std::cin, input);
 
-        std::vector<std::string> argv_ = slipStr(input, ' ');
+        std::vector<std::string> argv_ = StrUtil::split(input, ' ');
 
         if(argv_[0] == "quit") {break;}
         if(argv_[0] == ITEM) {itemContext(argv_.size(), argv_);}
@@ -184,7 +186,4 @@ int main() {
     //warehouse list <page>
 
 
-    //./wms item get <id> -> item
-
-    //syst.save(ITEM_D);
 }

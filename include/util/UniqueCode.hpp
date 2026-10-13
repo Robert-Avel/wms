@@ -4,7 +4,9 @@
 typedef uint64_t UniqueID;
 typedef uint64_t GroupID;
 
+namespace UniC {
+    typedef std::string UniqueCode;
 
-namespace UniqueCode {
-    std::pair<GroupID, UniqueID> strToPair(std::string code);
+    std::pair<GroupID, UniqueID> strToPair(UniqueCode code);
+    UniqueCode pairToStr(std::pair<GroupID, UniqueID> code);
 }

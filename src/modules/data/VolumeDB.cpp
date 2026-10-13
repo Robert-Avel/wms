@@ -15,7 +15,7 @@ bool VolumeDB::saveFile(IdObj<Volume> obj, std::ofstream& file) {
     file.write((char*) &v.getItemID(), sizeof(uint64_t));
     file.write((char*) &v.getWeight(), sizeof(uint32_t));
     file.write((char*) &v.getCubic(), sizeof(uint32_t));
-    file.write((char*) &v.getValue(), sizeof(cents));
+    file.write((char*) &v.getValue(), sizeof(Cents));
     file.write((char*) &v.getCreatedIn(), sizeof(time_t));
     file.write((char*) &v.getBatchID(), sizeof(uint64_t));
 
@@ -36,7 +36,7 @@ VolumeDB::loadFile(std::ifstream& file) {
     uint64_t item_id{0};
     uint32_t weight_g{0};
     uint32_t cubic_cm{0};
-    cents value{0};
+    Cents value{0};
 
     time_t created_in{0};
     uint64_t volume_batch{0};
@@ -47,7 +47,7 @@ VolumeDB::loadFile(std::ifstream& file) {
     file.read((char*) &item_id, sizeof(uint64_t));
     file.read((char*) &weight_g, sizeof(uint32_t));
     file.read((char*) &cubic_cm, sizeof(uint32_t));
-    file.read((char*) &value, sizeof(cents));
+    file.read((char*) &value, sizeof(Cents));
     file.read((char*) &created_in, sizeof(time_t));
     file.read((char*) &volume_batch, sizeof(uint64_t));
 

@@ -1,4 +1,4 @@
-#include "base_converter.hpp"
+#include "util.hpp"
 #include <cmath>
 #include <cstdio>
 #include <math.h>
@@ -24,18 +24,30 @@ inline uint64_t m_pow(I base, I exp) {
 }
 
 
-static bool checkDigit(std::string code, uint8_t base, bool has_numbers) {
+bool basec::checkDigit(std::string code, uint8_t base, bool has_numbers) {
     const char* digit_base = has_numbers ? basec::digit : basec::digit_alphabetic;
     uint8_t len = strlen(digit_base);
 
 
     for(char& c: code) {
         for(uint8_t i = 0; i < len; i++) {
-            if (c == digit_base[i] && i > base) {
+            if (c == digit_base[i] && i >= base) {
                 return false;
             }
         }
     }
+
+    for(char& c: code) {
+        bool valid = false;
+        for(uint8_t i = 0; i < len; i++) {
+            if(c == digit_base[i]) {
+                valid = true;
+                break;
+            }
+        }
+        if(!valid) {return false;}
+    }
+
     return true;
 }
 
@@ -116,4 +128,25 @@ uint64_t basec::baseToInt(std::string code, basec::StdMode mode_) {
 
 std::string basec::fintToAlphabetic(uint32_t value, uint8_t base) {
     return convert(value, base, digit_alphabetic);
+}
+
+
+std::vector<std::string> StrUtil::split(std::string input, char separator) {
+    std::vector<std::string> output;
+    std::string buffer;
+    bool in_quotes = false;
+    for(auto& ch: input) {
+        if(ch == separator && !in_quotes) {
+            output.push_back(buffer);
+            buffer.clear();
+        }
+        else {
+            if(ch != '"') {
+                buffer.append(1, ch);
+            }
+            if(ch == '"') {in_quotes = !in_quotes;}
+        }
+    }
+    output.push_back(buffer);
+    return output;
 }

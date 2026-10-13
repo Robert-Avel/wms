@@ -12,12 +12,12 @@ const IdObj<Item>* ItemManager::getItem(std::string group, uint64_t id) {
 }
 
 
-uint64_t ItemManager::creteItem(uint64_t group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, cents value) {
+uint64_t ItemManager::creteItem(uint64_t group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, Cents value) {
     Item i{global_name, cubic_cm, weight_g, value};
     return linked_data.append(group, i, true);
 }
 
-uint64_t ItemManager::creteItem(std::string group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, cents value) {
+uint64_t ItemManager::creteItem(std::string group, std::string global_name, uint32_t cubic_cm, uint32_t weight_g, Cents value) {
     return this->creteItem(group_sys.getGroupID(group), global_name, cubic_cm, weight_g, value);
 }
 

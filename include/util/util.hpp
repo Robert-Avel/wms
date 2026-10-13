@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 
 namespace basec
@@ -14,7 +15,7 @@ namespace basec
         HEXADECIMAL = 16,
         OCTAL = 8
     };
-
+    bool checkDigit(std::string code, uint8_t base, bool has_numbers);
 
     std::string fintToBase(uint64_t value, uint8_t base = 36);
     std::string fintToAlphabetic(uint32_t value, uint8_t base = 26);
@@ -23,7 +24,10 @@ namespace basec
 
     uint64_t fbaseToInt(std::string code, uint8_t base, bool has_numbers);
     uint64_t baseToInt(std::string code, StdMode mode_);
+}
 
+namespace StrUtil {
+    std::vector<std::string> split(std::string input, char separator);
 }
 
 #endif

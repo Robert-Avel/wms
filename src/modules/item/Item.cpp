@@ -16,7 +16,7 @@ const std::string& Item::getGlobalName() const {
 
 const uint32_t& Item::getCubic() const {return this->cubic_cm;}
 const uint32_t& Item::getWeight() const {return this->weight_g;}
-const cents& Item::getBruteValue() const {return this->value;}
+const Cents& Item::getBruteValue() const {return this->value;}
 
 std::string Item::formatData() const {
     std::ostringstream buffer;
