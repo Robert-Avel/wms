@@ -11,15 +11,23 @@
 #include "data/GroupDB.hpp"
 #include "data/ItemDB.hpp"
 #include "data/VolumeDB.hpp"
+#include "data/WarehouseDB.hpp"
 
 
 class DataMnger {
     std::string file_name;
 
+    void WarehouseLoad(std::ifstream& open_db) {
+        size_t gsize{0};
+        open_db.read((char*) &gsize, sizeof(gsize));
+        warehouses.loadAllFile(open_db, gsize);
+        warehouses.data.uptadeLastID();
+    }
+
     void ItemLoad(std::ifstream& open_db) {
-        size_t itens_n{0};
-        open_db.read((char*) &itens_n, sizeof(itens_n));
-        itens.loadAllFile(open_db, itens_n);
+        size_t gsize{0};
+        open_db.read((char*) &gsize, sizeof(gsize));
+        itens.loadAllFile(open_db, gsize);
         itens.data.updateID();
     }
 
@@ -37,11 +45,19 @@ class DataMnger {
     }
 
 
+    void WarehouseSave(std::ofstream& open_db) {
+        if(warehouses.data.isEmpty()) {return;}
+
+        size_t gsize = warehouses.data.size();
+        open_db.write((char*) &gsize, sizeof(size_t));
+        warehouses.saveAllFile(open_db);
+    }
+
     void ItemSave(std::ofstream& open_db) {
         if(itens.data.isEmpty()) {return;}
 
-        size_t itens_n = itens.data.size();
-        open_db.write((char*) &itens_n, sizeof(size_t));
+        size_t gsize = itens.data.size();
+        open_db.write((char*) &gsize, sizeof(size_t));
         itens.saveAllFile(open_db);
     }
 
@@ -61,6 +77,7 @@ class DataMnger {
     ItemDB itens;
     GroupDB groups;
     VolumeDB volumes;
+    WarehouseDB warehouses;
 
     DataMnger(std::string file): file_name(file) {
         std::ifstream open_db(file, std::ios::binary);
@@ -69,6 +86,7 @@ class DataMnger {
         ItemLoad(open_db);
         GroupLoad(open_db);
         VolumeLoad(open_db);
+        WarehouseLoad(open_db);
         open_db.close();
     }
 
@@ -78,6 +96,7 @@ class DataMnger {
         ItemSave(open_db);
         GroupSave(open_db);
         VolumeSave(open_db);
+        WarehouseSave(open_db);
         open_db.close();
     }
 };

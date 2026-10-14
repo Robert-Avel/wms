@@ -150,10 +150,36 @@ inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
     }
 }
 
+inline void warehouseContext(size_t argc, std::vector<std::string>& argv) {
+    //warehouse new <name> <capacity>
+    if(argv[1] == CNEW && argc == 4) {
+        auto r = syst.warehouse_module.createWH(
+            argv[2],
+            std::atol(argv[3].c_str())
+        );
+        if(r == 0) {std::cout << "Something went wrong!\n";}
+        else std::cout << "A new Warehouse was created with ID " << r << "\n";
+    }
 
+    //warehouse info <id>
+    else if(argv[1] == CINFO && argc == 3) {
+        auto r = syst.warehouse_module.getWH(std::atol(argv[2].c_str()));
+        if(r == nullptr) {std::cout << "No Warehouse Found";}
+        else {std::cout << argv[2] << " | " << r->getName() << " | " << r->getCapacity() << '\n';}
+    }
+
+    //warehouse list <page>
+    else if(argv[1] == CLIST && argc == 3) {
+        auto r = syst.warehouse_module.list(std::atol(argv[2].c_str()));
+        if(r.empty()) {std::cout << "No Warehouse Found\n";}
+        for(auto& it: r) {
+            std::cout << it.first << " | " << it.second->getName() << "\n";
+        }
+    }
+}
 
 int main() {
-    std::cout << "RobertWMS\nVersion 0.0.3\nAll Copyright reserved\n";
+    std::cout << "RobertWMS\nVersion 0.0.4\nAll Copyright reserved\n";
 
     while (true) {
         std::cout << "(robert-wms) ";
@@ -166,7 +192,14 @@ int main() {
         if(argv_[0] == ITEM) {itemContext(argv_.size(), argv_);}
         if(argv_[0] == GROUP) {groupContext(argv_.size(), argv_);}
         if(argv_[0] == VOLUME) {volumeContext(argv_.size(), argv_);}
+        if(argv_[0] == WAREHOUSE) {warehouseContext(argv_.size(), argv_);}
     }
+
+
+    //address new <type> <capacity>
+    //address info <warehouse_id> <id>
+    //addess delete <warehouse_id> <id>
+
 
 
     //item search <name>

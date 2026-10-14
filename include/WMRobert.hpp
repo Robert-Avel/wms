@@ -3,6 +3,8 @@
 #include "data/DataMngr.hpp"
 #include "item/ItemManager.hpp"
 #include "volume/VolumeManager.hpp"
+#include "warehouse/Warehouse.hpp"
+#include "warehouse/WarehouseManager.hpp"
 
 
 static IdGroup<Volume> placeholder_data;
@@ -15,7 +17,8 @@ class WMRobert {
             data_module(data_base_file),
             group_module(data_module.groups.data),
             item_module(data_module.itens.data, group_module),
-            volume_module(data_module.volumes.data, group_module, data_module.itens.data)
+            volume_module(data_module.volumes.data, group_module, data_module.itens.data),
+            warehouse_module(data_module.warehouses.data)
             {}
 
 
@@ -23,5 +26,5 @@ class WMRobert {
         GroupMngr group_module;
         ItemManager item_module;
         VolumeManager volume_module;
-
+        WarehouseManager warehouse_module;
 };
