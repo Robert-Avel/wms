@@ -43,3 +43,17 @@ std::list<const IdObj<Item>*> ItemManager::list(uint64_t group, uint32_t page) {
 std::list<const IdObj<Item>*> ItemManager::list(std::string group, uint32_t page) {
     return this->list(group_sys.getGroupID(group), page);
 }
+
+
+std::list<std::pair<std::string, size_t>> ItemManager::dataStatus() const {
+    std::list<std::pair<std::string, size_t>> output;
+    if(linked_data.isEmpty()) {return output;}
+
+    for(auto& str_group: group_sys.getMap()) {
+        auto group = linked_data.getGroup(str_group.second);
+        if(group != nullptr) {
+            output.push_back({str_group.first, group->size()});
+        };
+    }
+    return output;
+}

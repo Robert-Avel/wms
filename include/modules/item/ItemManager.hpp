@@ -29,6 +29,8 @@ class ItemManager  {
 
         std::list<const IdObj<Item>*> list(uint64_t group, uint32_t page);
         std::list<const IdObj<Item>*> list(std::string group, uint32_t page);
+
+        std::list<std::pair<std::string, size_t>> dataStatus() const;
 };
 
 #endif

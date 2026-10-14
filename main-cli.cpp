@@ -25,6 +25,7 @@
 #define CINFO "info"
 #define CLIST "list"
 #define CSEARCH "search"
+#define CSTATUS "status"
 
 
 class {
@@ -126,9 +127,15 @@ inline void itemContext(size_t argc, std::vector<std::string>& argv)
         for(auto& it: r) {
             std::cout << it->getID() << " | " << it->cgetObj().getGlobalName() << "\n";
         }
-
     }
-
+        //item status
+    else if(argv[1] == CSTATUS && argc == 2) {
+        auto r = wms_sys.syst->item_module.dataStatus();
+        if(r.empty()) {std::cout << "No Itens Found\n"; return;}
+        for(auto& it: r) {
+            std::cout << it.first << " -> " << it.second << "\n";
+        }
+    }
 }
 
 inline void volumeContext(size_t argc, std::vector<std::string>& argv) {
@@ -223,7 +230,7 @@ inline void systemContext(size_t argc, std::vector<std::string>& argv) {
 }
 
 int main() {
-    std::cout << "RobertWMS\nVersion 0.0.5\nAll Copyright reserved\n";
+    std::cout << "RobertWMS\nVersion 0.0.6\nAll Copyright reserved\n";
 
     while (true) {
         std::cout << "(robert-wms) ";
