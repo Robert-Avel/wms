@@ -29,7 +29,7 @@ class IdGroup {
         bool removeGroup(uint64_t group_id);
 
         uint64_t append(uint64_t group_id, T& i, bool create_group = true);
-        bool insert(uint64_t group_id, uint64_t id, T& i,  bool create_group = true);
+        bool insert(uint64_t group_id, uint64_t id, const T& i,  bool create_group = true);
 
         IdObj<T>* getItem(uint64_t group_id, uint64_t id);
 

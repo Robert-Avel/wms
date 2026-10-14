@@ -1,13 +1,9 @@
-#include "data/VolumeDB.hpp"
+#include "data/BaseDB.hpp"
 #include "volume/Volume.hpp"
 #include <iostream>
 
-bool VolumeDB::saveFile(IdObj<Volume> obj, std::ofstream& file) {
-    if(!file) {
-        std::cerr << "File not open!\n";
-        return false;
-    }
-    Volume& v = obj.getObj();
+bool VolumeDBs::saveOne(const Obj& obj, std::ofstream& file) {
+    const Volume& v = obj.cgetObj();
 
     file.write((char*) &obj.getGroup(), sizeof(uint64_t));
     file.write((char*) &obj.getID(), sizeof(uint64_t));
@@ -22,9 +18,8 @@ bool VolumeDB::saveFile(IdObj<Volume> obj, std::ofstream& file) {
     return true;
 }
 
-std::optional<IdObj<Volume>>
-VolumeDB::loadFile(std::ifstream& file) {
-    std::optional<IdObj<Volume>> output;
+std::optional<VolumeDBs::Obj> VolumeDBs::loadOne(std::ifstream& file) {
+    std::optional<VolumeDBs::Obj> output;
     if(!file) {
         std::cerr << "File not open!\n";
         return output;
@@ -56,25 +51,15 @@ VolumeDB::loadFile(std::ifstream& file) {
 }
 
 
-void VolumeDB::saveAllFile(std::ofstream& file) {
-    for(auto& g: data) {
-        for(auto& o: g.second) {
-            saveFile(o.second, file);
-        }
-    }
+bool VolumeDBs::insert(const Obj& o) {
+    return data.insert(o.getGroup(), o.getID(), o.cgetObj(), true);
 }
 
 
-bool VolumeDB::loadAllFile(std::ifstream& file, size_t d_size) {
-    if(!file) {
-        std::cerr << "File not open!\n";
-        return false;
-    }
-    for(size_t i = 0; i < d_size; i++) {
-        auto r = loadFile(file);
-        if(r.has_value()) {
-            data.insert(r->getGroup(), r->getID(), r->getObj(), true);
+void VolumeDBs::saveIterator(std::ofstream& file) {
+    for(auto& g: data) {
+        for(auto& o: g.second) {
+            saveOne(o.second, file);
         }
     }
-    return true;
 }

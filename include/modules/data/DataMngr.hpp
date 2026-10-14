@@ -8,10 +8,7 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <string>
-#include "data/GroupDB.hpp"
-#include "data/ItemDB.hpp"
-#include "data/VolumeDB.hpp"
-#include "data/WarehouseDB.hpp"
+#include "data/BaseDB.hpp"
 
 
 class DataMnger {
@@ -74,14 +71,17 @@ class DataMnger {
     }
 
     public:
-    ItemDB itens;
-    GroupDB groups;
-    VolumeDB volumes;
-    WarehouseDB warehouses;
+    ItemDBs itens;
+    GroupDBs groups;
+    VolumeDBs volumes;
+    WarehouseDBs warehouses;
 
     DataMnger(std::string file): file_name(file) {
         std::ifstream open_db(file, std::ios::binary);
-        if(!open_db) {return;}
+        if(!open_db) {
+            std::cerr << "Fail to open file";
+            return;
+        }
 
         ItemLoad(open_db);
         GroupLoad(open_db);

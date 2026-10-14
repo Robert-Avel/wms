@@ -1,18 +1,14 @@
-#include "data/ItemDB.hpp"
 #include "IdObj.hpp"
 #include "item/Item.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <optional>
+#include "data/BaseDB.hpp"
 
 
-bool ItemDB::saveFile(IdObj<Item> obj, std::ofstream& file) {
-    if(!file) {
-        std::cerr << "File not open!\n";
-        return false;
-    }
-    Item& i = obj.getObj();
+bool ItemDBs::saveOne(const Obj& obj, std::ofstream& file) {
+    const Item& i = obj.cgetObj();
 
     file.write((char*) &obj.getGroup(), sizeof(uint64_t));
     file.write((char*) &obj.getID(), sizeof(uint64_t));
@@ -28,8 +24,8 @@ bool ItemDB::saveFile(IdObj<Item> obj, std::ofstream& file) {
     return true;
 }
 
-std::optional<IdObj<Item>> ItemDB::loadFile(std::ifstream& file) {
-    std::optional<IdObj<Item>> i;
+std::optional<ItemDBs::Obj> ItemDBs::loadOne(std::ifstream& file) {
+    std::optional<ItemDBs::Obj> i;
     if(!file) {
         std::cerr << "File not open!\n";
         return i;
@@ -58,20 +54,14 @@ std::optional<IdObj<Item>> ItemDB::loadFile(std::ifstream& file) {
     return i;
 }
 
-void ItemDB::saveAllFile(std::ofstream& file) {
-    for(auto& g: data) {
-        for(auto& obj: g.second) {
-            saveFile(obj.second, file);
-        }
-    }
+bool ItemDBs::insert(const Obj& o) {
+    return data.insert(o.getGroup(), o.getID(), o.cgetObj(), true);
 }
 
-bool ItemDB::loadAllFile(std::ifstream& file, size_t d_size) {
-    for(size_t i = 0; i < d_size; i++) {
-        auto l_obj = loadFile(file);
-        if(l_obj.has_value()) {
-            data.insert(l_obj->getGroup(), l_obj->getID(), l_obj->getObj(), true);
+void ItemDBs::saveIterator(std::ofstream& file) {
+    for(auto& g: data) {
+        for(auto& obj: g.second) {
+            saveOne(obj.second, file);
         }
     }
-    return true;
 }

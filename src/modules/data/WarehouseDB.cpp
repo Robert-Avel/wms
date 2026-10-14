@@ -1,25 +1,22 @@
-#include "data/WarehouseDB.hpp"
+#include "data/BaseDB.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <fstream>
 
-bool WarehouseDB::saveFile(Warehouse obj, uint64_t id, std::ofstream& file) {
-    if(!file) {
-        std::cerr << "File not open!\n";
-        return false;
-    }
-    file.write((char*) &id, sizeof(uint64_t));
-    size_t ssize = obj.getName().size();
-    file.write((char*) &ssize, sizeof(size_t));
-    file.write(obj.getName().c_str(), ssize);
+bool WarehouseDBs::saveOne(const Obj& obj, std::ofstream& file) {
+    file.write((char*) &obj.first, sizeof(uint64_t));
+    size_t ssize = obj.second.getName().size();
 
-    file.write((char*) &obj.getCapacity(), sizeof(CubicCm));
+    file.write((char*) &ssize, sizeof(size_t));
+    file.write(obj.second.getName().c_str(), ssize);
+
+    file.write((char*) &obj.second.getCapacity(), sizeof(CubicCm));
     return true;
 }
 
-std::optional<std::pair<uint64_t, Warehouse>> WarehouseDB::loadFile(std::ifstream& file) {
-    std::optional<std::pair<uint64_t, Warehouse>> output;
+std::optional<WarehouseDBs::Obj> WarehouseDBs::loadOne(std::ifstream& file) {
+    std::optional<WarehouseDBs::Obj> output;
     if(!file) {
         std::cerr << "File not open!\n";
         return output;
@@ -41,25 +38,17 @@ std::optional<std::pair<uint64_t, Warehouse>> WarehouseDB::loadFile(std::ifstrea
 }
 
 
-void WarehouseDB::saveAllFile(std::ofstream& file) {
+void WarehouseDBs::saveIterator(std::ofstream& file) {
     if(!file) {
         std::cerr << "File not open!\n";
         return;
     }
     for(auto& wh: data) {
-        saveFile(wh.second, wh.first, file);
+        saveOne({wh.first, wh.second}, file);
     }
 }
-bool WarehouseDB::loadAllFile(std::ifstream& file, size_t d_size) {
-    if(!file) {
-        std::cerr << "File not open!\n";
-        return false;
-    }
-    for(size_t i = 0; i < d_size; i++) {
-        auto r = loadFile(file);
-        if(r.has_value()) {
-            data.insert(r->first, r->second);
-        }
-    }
-    return true;
+
+
+bool WarehouseDBs::insert(const Obj& o) {
+    return data.insert(o.first, o.second);
 }

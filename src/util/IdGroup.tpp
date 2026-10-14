@@ -60,7 +60,7 @@ uint64_t IdGroup<T>::append(uint64_t group_id, T& i, bool create_group) {
 }
 
 template <class T>
-bool IdGroup<T>::insert(uint64_t group_id, uint64_t id, T& i, bool create_group) {
+bool IdGroup<T>::insert(uint64_t group_id, uint64_t id, const T& i, bool create_group) {
     _Group<T>* g;
     if(create_group) {
         g = createGroupIfNotExist(group_id);

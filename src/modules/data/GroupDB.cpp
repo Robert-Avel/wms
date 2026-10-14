@@ -1,13 +1,11 @@
-#include "data/GroupDB.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <utility>
+#include "data/BaseDB.hpp"
 
 
-bool GroupDB::saveFile(const std::pair<std::string, uint64_t>& obj, std::ofstream& file) {
-    if(!file) {return false;}
-
+bool GroupDBs::saveOne(const Obj& obj, std::ofstream& file) {
     size_t ssize = obj.first.size();
     file.write((char*) &ssize, sizeof(size_t));
     file.write(obj.first.c_str(), ssize);
@@ -16,7 +14,7 @@ bool GroupDB::saveFile(const std::pair<std::string, uint64_t>& obj, std::ofstrea
     return true;
 }
 
-std::optional<std::pair<std::string, uint64_t>> GroupDB::loadFile(std::ifstream& file) {
+std::optional<GroupDBs::Obj> GroupDBs::loadOne(std::ifstream& file) {
     std::optional<std::pair<std::string, uint64_t>> output;
     if(!file) {return output;}
 
@@ -34,21 +32,16 @@ std::optional<std::pair<std::string, uint64_t>> GroupDB::loadFile(std::ifstream&
 }
 
 
+bool GroupDBs::insert(const Obj& o) {
+    data.insert({o.first, o.second});
+    return true;
+}
 
-void GroupDB::saveAllFile(std::ofstream& file) {
+
+void GroupDBs::saveIterator(std::ofstream& file) {
     if(!file) {return;}
 
     for(auto& obj: this->data) {
-        saveFile(obj, file);
+        saveOne(obj, file);
     }
-}
-
-bool GroupDB::loadAllFile(std::ifstream& file, size_t d_size) {
-    if(!file) {return false;}
-
-    for(size_t i = 0; i < d_size; i++) {
-        auto r = loadFile(file);
-        if(r.has_value()) {this->data.insert(r.value());}
-    }
-    return true;
 }
